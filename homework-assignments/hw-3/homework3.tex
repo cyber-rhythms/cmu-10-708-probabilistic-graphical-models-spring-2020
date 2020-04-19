@@ -1,0 +1,488 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{fullpage}
+\usepackage{parskip}
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage{microtype}
+\usepackage{booktabs}
+\usepackage{graphicx,subcaption}
+\usepackage{algorithm}
+\usepackage[round]{natbib}
+\usepackage{tikz-cd}
+\usepackage{xcolor}
+\usepackage{algpseudocode}
+\usepackage{hyperref}
+\usepackage[most]{tcolorbox}
+\newtcolorbox[]{solution}[1][]{%
+    breakable,
+    enhanced,
+    colback=white,
+    title=Solution,
+    #1
+}
+\usepackage{xcolor} %hilight
+\newcommand{\hilight}[1]{\colorbox{yellow}{#1}}
+ \newcommand{\yiwen}[1]{\textcolor{blue}{#1}}
+%% ---------------------------------
+%\begin{solution}
+%\hilight{TODO}
+%\end{solution}
+%% ---------------------------------
+
+
+
+\usepackage{tikz}
+\newcommand*\circled[1]{
+\tikz[baseline=(char.base)]{\node[shape=circle,draw,inner sep=1pt] (char) {#1};}
+}
+            
+ 
+% xun
+
+            
+
+\title{10-708 PGM (Spring 2020): Homework 3
+% {\color{red} v1.1}
+}
+\author{
+\begin{tabular}{rl}
+Andrew ID: & [your Andrew ID] \\
+Name: & [your first and last name] \\
+Collaborators: & [Andrew IDs of all collaborators, if any]
+\end{tabular}
+}
+\date{}
+
+
+\begin{document}
+
+\maketitle
+
+
+
+\section{LSTM-CRF (Xun) (40 points)}
+
+
+\newcommand{\zvec}{\mathbf{z}}
+\newcommand{\xvec}{\mathbf{x}}
+\newcommand{\ptil}{\tilde{p}}
+
+
+In Homework 1, we have implemented the EM updates for HMM, including the forward-backward message passing algorithm for exact posterior inference of the latent states. 
+But everything were discrete, linear, and Gaussian, i.e., boring.  
+We will see a much more interesting version of it, where the features (potential functions) are learned from deep learning. 
+
+
+This time, we are concerned with the supervised sequence tagging problem. 
+In particular, we are provided with the sequence of observations $ \xvec_{1:T} $ and its corresponding labels (tags) $ \zvec_{1:T} $ for training. 
+Our goal is to be able to predict the tags $ \zvec_{1:T} $ for unseen sequence of observations $ \xvec_{1:T} $ at test time. 
+
+For instance, consider the named entity recognition (NER) problem. 
+We would like to locate and label named entities mentioned in the unstructured text as predefined categories such as ``name of the person'' or ``name of the place''.
+An example sentence and tagging would be:
+\begin{center}
+\begin{tikzcd}[column sep=tiny, row sep=tiny]
+\texttt{Jim} & \texttt{bought} & \texttt{300} & \texttt{shares} & \texttt{of} & \texttt{Acme} & \texttt{Corp.} & \texttt{in} & \texttt{2006}. \\
+\texttt{B-Person} & \texttt{O} & \texttt{O}& \texttt{O} & \texttt{O} & \texttt{B-Org} & \texttt{I-Org} & \texttt{O} & \texttt{B-Time}
+\end{tikzcd}
+\end{center}
+where three categories considered are $ \{ \texttt{Person}, \texttt{Org}, \texttt{Time} \} $, and the $ \{\texttt{B}, \texttt{I}, \texttt{O} \} $ follows the IOB2 format. 
+For further information, please refer to the Wikipedia page on inside–outside–beginning. But you can solve this problem without knowing what IOB2 is.
+
+
+A workhorse in sequence tagging is the conditional random field (CRF) model. 
+For this problem, consider a linear chain CRF with $ T $ time steps, $ M $ discrete states, and $ K $-dimensional observations, where $ \zvec_t \in \{0,1\}^M $, $ \| \zvec_t \| = 1 $, $ \xvec_t \in \mathbb{R}^K $ for $ t \in [T] $.
+
+The reduced graph for the conditional is again a simple chain: 
+\begin{center}
+\begin{tikzcd}
+\zvec_1 \arrow[r,dash] & \zvec_2 \arrow[r,dash] & \cdots \arrow[r,dash] & \zvec_T 
+\end{tikzcd}
+\end{center}
+with corresponding Gibbs distribution given by
+\begin{align}
+p(\zvec_{1:T} | \xvec_{1:T}) 
+& = \frac{1}{Z(\xvec_{1:T})} \cdot \ptil(\zvec_{1:T}), \\
+\ptil(\zvec_{1:T})
+& = \psi_1 (\zvec_1) 
+\cdot \prod_{t=2}^{T} \psi_t (\zvec_{t-1}, \zvec_t) 
+\cdot \psi_{T+1} (\zvec_T), \\
+Z(\xvec_{1:T})
+& = \sum_{\zvec_{1:T}} \ptil(\zvec_{1:T})
+\end{align}
+where the clique potentials are
+\begin{align}
+\psi_1 (\zvec_1) & = \phi_1 (\zvec_1, \xvec_{1:T}) \\
+\psi_t (\zvec_{t-1}, \zvec_t) & = \phi_t (\zvec_t, \xvec_{1:T}) \eta_t (\zvec_{t-1}, \zvec_t)  \quad t = 2, \dotsc, T \\
+\psi_{T+1} (\zvec_T) & = 1
+\end{align}
+
+
+In the CRF nomenclature, $ \phi_t $ is the feature function and $ \eta_t $ is the transition score. 
+In the good old days, humans used to design various rules to generate feature functions.
+For instance, one intuition is that whether the first character of a word is capitalized is correlated with whether the word is a name of a person.
+Then a hand-crafted feature function would  simply be 
+$ \phi (z_t, \xvec_{1:T}) = w \cdot \mathbf{1} \{z_t = \texttt{Person}, \texttt{first character of } x_t \texttt{ capitalized} \} $, with the linear coefficient $ w $ measuring the strength of this feature. 
+Learning the CRF is essentially estimating these parameters given training data. 
+
+
+However, it's 2020 and it is not hard to imagine an obvious way of automatically generating features: neural networks. 
+In particular, for this problem, we will use a bi-directional word-level LSTM, whose input is the sequence $ \xvec_{1:T} $ and output is the singleton potentials $ \phi_{1:T} $. 
+The entire LSTM and CRF model will then be trained jointly using stochastic gradient descent with gradients computed by automatic differentiation. 
+
+
+Let $ \theta $ be the set of parameters of $ \{ \phi_{1:T} \} $ and $ \{ \eta_{1:T} \} $. 
+The MLE is then given by
+\begin{align}
+\min_{\theta} \ \frac{1}{n}  \sum_{i=1}^{n} - \log p_{\theta} (\zvec_{1:T}^{(i)} | \xvec_{1:T}^{(i)})
+\end{align}
+Similar to HMM, this requires computing the log-partition function, i.e., inference on $ \zvec_{1:T} $. 
+Also similar to HMM, the reduced graph is a tree, hence belief propagation can perform efficient exact inference. 
+
+
+At test time, we would like to find the best tags for a given observation sequence:
+\begin{align}
+\max_{\zvec_{1:T}} \ \log p_{\theta} (\zvec_{1:T} | \xvec_{1:T})
+\end{align}
+Again, this max-decoding problem can be solved efficiently using the message passing algorithm. 
+
+In this problem, we will implement both log-partition function and max-decoding. 
+You should convince yourself that the algorithm can be derived as below. (No need to show.)
+Please complete the provided code template and submit to Gradescope. 
+The template has a toy problem to play with. 
+The submitted code will be tested against randomly generated problem instances. 
+
+
+
+
+
+\newpage
+\begin{algorithm}[H]
+\caption{Negative log-likelihood for CRF}
+\vspace{1ex}
+\begin{enumerate} %[itemsep=1ex]
+\item 
+Forward messages in log-scale:
+\begin{align}
+\log \alpha (\zvec_1) 
+& = \log \phi_1 (\zvec_1, \xvec_{1:T})  \\
+\log \alpha (\zvec_t) 
+& = \log \phi_t (\zvec_t, \xvec_{1:T}) + \log \sum_{\zvec_{t-1}} \exp \{ \log \eta_t (\zvec_{t-1}, \zvec_t) + \log \alpha (\zvec_{t-1})  \}   \quad t = 2, \dotsc, T  
+\end{align}
+
+
+\item 
+Log-partition function:
+\begin{align}
+\log Z(\xvec_{1:T}) = \log \sum_{\zvec_T} \exp \{ \log \alpha (\zvec_T)  \}
+\end{align}
+
+
+\item 
+Unnormalized density in log-scale: 
+\begin{align}
+\log \ptil_{\theta} (\zvec_{1:T}, \xvec_{1:T})
+= \log \phi_1 (\zvec_1, \xvec_{1:T}) 
++ \sum_{t=2}^{T}  ( \log \phi_t (\zvec_t, \xvec_{1:T}) + \log \eta_t (\zvec_{t-1}, \zvec_t) )
+\end{align}
+
+\item 
+Negative log-likelihood:
+\begin{align}
+- \log p_{\theta} (\zvec_{1:T} | \xvec_{1:T})
+= \log Z(\xvec_{1:T}) - \log \ptil_{\theta} (\zvec_{1:T}, \xvec_{1:T})
+\end{align}
+
+\end{enumerate}
+\end{algorithm}
+
+
+
+
+
+
+
+
+
+
+\begin{algorithm}[H]
+\caption{Viterbi decoding for CRF}
+\vspace{1ex}
+\begin{enumerate} %[itemsep=1ex]
+\item 
+Forward max-product messages in log-scale (and optimal indices):
+\begin{align}
+\log \alpha^* (\zvec_1) 
+& = \log \phi_1 (\zvec_1, \xvec_{1:T})  \\
+\log \alpha^* (\zvec_t) 
+& = \log \phi_t (\zvec_t, \xvec_{1:T}) + \max_{\zvec_{t-1}} \{ \log \eta_t (\zvec_{t-1}, \zvec_t) + \log \alpha^* (\zvec_{t-1}) \} ,  \quad t = 2, \dotsc, T   \\
+\alpha^+ (\zvec_t) 
+& = \mathop{\mathrm{argmax}}_{\zvec_{t-1}} \{ \log \eta_t (\zvec_{t-1}, \zvec_t) + \log \alpha^* (\zvec_{t-1}) \} ,  \quad t = 2, \dotsc, T  
+\end{align}
+
+
+
+\item 
+Max score:
+\begin{align}
+\max_{\zvec_{1:T}} \{ \log \ptil (\zvec_{1:T}, \xvec_{1:T}) \}
+= \max_{\zvec_T}  & \{ \log \alpha^* (\zvec_T) \} \\
+\zvec_T^*
+= \mathop{\mathrm{argmax}}_{\zvec_T} & \{ \log \alpha^* (\zvec_T) \}
+\end{align}
+
+
+\item 
+Backward decoding: 
+\begin{align}
+\zvec_{t-1}^*
+= \alpha^+ (\zvec_t^*)  , \quad t = T, \dotsc, 2
+\end{align}
+
+
+
+
+
+
+\end{enumerate}
+\end{algorithm}
+
+
+
+
+
+\newpage
+\section{Consistency of Lasso (Haohan) (20 points)}
+
+
+\newcommand{\xtrain}{X_{\textnormal{train}}}
+\newcommand{\ytrain}{y_{\textnormal{train}}}
+\newcommand{\xtest}{X_{\textnormal{test}}}
+\newcommand{\ytest}{y_{\textnormal{test}}}
+\newcommand{\msetrain}{\textnormal{MSE}_{\textnormal{train}}}
+\newcommand{\msetest}{\textnormal{MSE}_{\textnormal{test}}}
+
+
+Before going into graphical lasso, let's first consider a linear regression problem, with covariates $ X \in \mathbb{R}^{n \times p} $ and response $ y \in \mathbb{R}^{n} $.
+In the high-dimensional  setting $ n \ll p $, the ordinary least squares (OLS) regression will not generalize, so we need a regularized least squares as our model. 
+We consider one of the most prominent regularized regression models, namely the \emph{Lasso}, as our main tool in this homework problem. 
+Lasso estimates the regression coefficients as 
+\begin{align}
+\hat{\beta}_{\mathrm{lasso}} = \mathop{\mathrm{argmin}}_{\beta \in \mathbb{R}^{p}} \  \| y  - X \beta \|_2^2 + \lambda \|\beta \|_1
+\end{align}
+where $\lambda$ is a hyperparameter that governs the strength of the regularization and controls the sparsity of the coefficients identified. 
+
+The attachment contains the training data  $ (\xtrain, \ytrain) $ and the test data $ (\xtest, \ytest) $. 
+You can use your favorite Lasso implementation, such as \texttt{sklearn.linear\_model.Lasso} or \texttt{glmnet} in R. 
+We will use mean squared error (MSE) as the main evaluation metric. 
+
+
+
+
+\subsection{Warm-up (5 points)}
+
+Let's do some warm-ups. 
+
+\begin{enumerate}
+\item 
+First trial (2 points).
+Fit a Lasso model with $ (\xtrain, \ytrain) $ and test it with $ (\xtest, \ytest) $, report $ \msetrain $ and $ \msetest $. 
+You should observe a generalization gap. 
+
+
+\item 
+Hyperparameter tuning (3 points). 
+Tuning hyperparameters to improve the performance has seemingly become a controversial strategy nowadays. Nonetheless, let's experiment with some choices of $\lambda$ and check the performance. 
+Please repeat the basic experiment above with 10 choices of $\lambda$s evenly spaced on a log scale from $10^{-5}$ to $10^{5}$. 
+Report one plot showing both the $ \msetrain $ and $ \msetest $ as a function of $\lambda$.  
+
+\end{enumerate}
+
+
+
+
+\subsection{Weak Irrepresentatble Condition (5 points)}
+
+You should notice that there is always a generalization gap between training and testing, and the gap seems larger than what can be expected from the measurement errors. 
+Is it some property of the data that has trapped us from closing the generalization gap?
+The answer is yes. 
+
+The data is indeed generated from a linear Gaussian model as follows:
+\begin{align}
+y^{(i)} = X^{(i)} \beta^* + \epsilon^{(i)}, \quad \epsilon^{(i)} \sim N(0, 1), \quad i = 1, \dotsc, n
+\end{align}
+However, with some caveats: 
+\begin{itemize}
+\item Only $ q $ covariates $ (q < p) $ are \textit{active}, i.e., associated with the response. 
+In other words, the true $ \beta^* \in \mathbb{R}^{p} $ has $ q $ nonzeros. 
+
+\item For each active covariate $ j $, $ \beta^*_j \sim U(0, 5) $ and $ X^{(i)}_{j} \sim N(0, 1) $ for $ i = 1, \dotsc, n $.
+
+\item What about the rest of the $ p - q $ features? 
+In $ \xtrain $, they are duplicates of the active covariates.
+However, $ \xtest $ is not constructed as so. 
+\end{itemize}
+
+
+Let $ X_a $ be the active covariates of $ \xtrain $ and $ X_b $ be the remaining. 
+We now offer a theoretical tool: if Lasso can correctly identify the active covariates, then 
+\begin{align}
+| C_{ba} C_{aa}^{-1} \mathbf{1} | < \mathbf{1}
+\end{align}
+where $C_{ba} = \frac{1}{n} X_b^T X_a$, $ C_{aa} = \frac{1}{n} X_a^T X_a$, $\mathbf{1}$ denotes a vector of ones, and the inequality holds element-wise.
+
+
+
+Show that Lasso cannot correctly identify the active covariates with the data generated as above. 
+It is not required, but please refer to \citep{zhao2006model} for further information. 
+
+
+
+
+
+\subsection{Improving the Performance (10 points)} 
+
+It looks like a vanilla Lasso will never solve our problem. 
+Fortunately, we have more knowledge of data. 
+In this section, we will design better methods that take advantage of the knowledge of the data and hopefully get better MSE. 
+
+For all the following two questions, please emphasize the design rationale of the method. 
+Regarding empirical performance, please report it in a single plot showing both $ \msetrain $ and $ \msetest $ as a function of the hyperparameter. 
+You do not have to stick with Lasso, but please limit yourself within, vaguely, the family of regularized least squares. 
+The grading will significantly value the rationale of the methods than the actual empirical performance since random trial-and-error may also lead to good performance due to the simplicity of the data. 
+
+
+\begin{enumerate}
+\item 
+Heterogeneity of the samples (5 points).
+There are rarely truly iid data in the real world and the heterogeneity of the samples often create some spurious signals identified by the model. 
+We offer an extra piece of knowledge of the data: 
+\begin{itemize}
+\item For the remaining $p-q$ covariates of $\xtrain$, when we create them by duplicating the active covariates, we did not duplicate for every sample, but only 90\% of the samples. 
+\end{itemize}
+Please take advantage of this message, design a method, test it, and report the performance. 
+Please be creative, but if one needs some inspiration, \citep{meinshausen2010stability} may offer some. 
+
+\item 
+Structure of the features (5 points).
+Another perspective is to take advantage of the knowledge of features, 
+which can often be introduced by some intuitive understanding of the problem in reality. 
+We offer another piece of knowledge of the data:
+\begin{itemize}
+\item If the $i$\textsuperscript{th} covariate is active and the $j$\textsuperscript{th} covariate is its duplicate, then $i<j$. 
+\end{itemize}
+Please take advantage of this message, design a method, test it, and report the performance. 
+Please be creative, but if one needs some inspiration, ``stepwise selection'' may offer some.
+
+\end{enumerate}
+
+
+
+
+
+
+
+
+
+\section{Estimation of Graph (Haohan) (40 points)} 
+
+
+
+In Homework 1, we have shown that if a random vector $ X \in \mathbb{R}^{p} $ is jointly Gaussian $ X \sim N(0, \Sigma) $, then $ (\Sigma^{-1})_{ij} = 0 $ if and only if $ X_i \perp X_j \mid X_{-ij} $. 
+In this problem, we will use this fact to estimate the conditional independence graph from observations of $ X $ using Graphical Lasso~\citep{friedman2008sparse}. 
+
+The attachment contains the $ n \times p $ data matrix. 
+You can use your favorite Graphical Lasso implementation, such as \texttt{sklearn.covariance.GraphicalLasso} or \texttt{glasso} in R. 
+
+\begin{enumerate}
+\item 
+Logdet program (8 points). 
+Let $ S \in \mathbb{R}^{p \times p} $ be the empirical covariance matrix. 
+Show that the MLE is given by the following optimization problem:
+\begin{align}
+\min_{\Theta \succeq 0} \  \mathop{\mathrm{tr}} (S \Theta) - \log \det \Theta 
+\end{align}
+
+\item 
+First run (8 points). 
+Similar to Lasso, in the high-dimensional setting we would like to add an $ L_1 $ regularizer, leading to the Graphical Lasso estimate: 
+\begin{align}
+\min_{\Theta \succeq 0} \  \textnormal{tr} (S \Theta) - \log \det \Theta + \lambda \| \Theta \|_1
+\end{align}
+Fit Graphical Lasso on the data for $\lambda = \{10^{-5}, 10^{-4}, 10^{-3}, 10^{-2}, 10^{-1} \}$, and report the performance in precision and recall compared to the following ground truth graph:
+\begin{center}
+\begin{tikzcd}
+X_1 \arrow[r, dash] \arrow[d, dash] & X_2 \arrow[d, dash] \\
+X_3 \arrow[r, dash] \arrow[ur, dash] & X_4
+\end{tikzcd}
+\end{center}
+
+
+
+\item 
+Consistency condition (8 points). 
+You probably find that the graphical lasso cannot effectively estimate the graph even if we have 1 million data points for just 4 nodes, and there is no noise in the data at all. Now let's see what's happening. 
+
+Again, we offer a theoretical tool to help: it is known that Graphical Lasso can only estimate the graph consistently when the following condition is met: 
+\begin{align}
+\max_{e\in \mathcal{S}^C} \ \|(\Sigma \otimes \Sigma)_{e, \mathcal{S}}(\Sigma \otimes \Sigma)_{\mathcal{S}, \mathcal{S}}^{-1} \|_1 < 1
+\end{align}
+where $\otimes$ stands for Kronecker product, $\mathcal{S}$ is the support set of the precision matrix (edges in the graph), $\mathcal{S}^C$ is the complement of $\mathcal{S}$, and $(\Sigma \otimes \Sigma)_{e, \mathcal{S}}$ is indexing into a $ p^2 \times p^2 $ matrix with the first dimension being $e$ and the second dimension being $\mathcal{S}$, resulting in a $ 1\times |\mathcal{S}|$ vector.
+
+
+The data is generated according to the following covariance matrix:
+\begin{align}
+\Sigma = \begin{pmatrix} 1& c& c& 2c^2 \\ c & 1 & 0&c\\c&0&1&c\\2c^2&c&c&1\end{pmatrix}
+\end{align}
+with some $ c > 0 $. 
+Obviously, we must have $ c < 1 / \sqrt{2} $ to make sure $ \Sigma \succeq 0 $. 
+Now, since graphical lasso cannot estimate this graph, find a tighter bound of $c$ through numerical experiments. 
+
+
+
+\item 
+D-trace loss (8 points). 
+Graphical Lasso is not the only way to obtain sparse conditional independence graphs. 
+In fact, the log-determinant term can be computationally demanding. 
+Here's an alternative estimate that does not involve log-det term: 
+\begin{align}
+\min_{\Theta \succeq 0, \textnormal{diag}(\Theta) = 0} \ \frac{1}{2} \langle \Theta^2, S \rangle - \textnormal{tr} (\Theta) + \lambda \| \Theta \|_1
+\end{align}
+Show that this new cost function is convex and has a unique minimizer at $\widehat{\Theta} =\Sigma^{-1}$, when $ \lambda = 0 $. 
+
+
+\item 
+Consistency condition (8 points).
+The corresponding condition for this cost function is that:
+\begin{align}
+\max_{e\in \mathcal{S}^C} \ \|\Gamma_{e, \mathcal{S}}\Gamma_{\mathcal{S}, \mathcal{S}}^{-1} \|_1 < 1
+\end{align}
+where $\Gamma = (\Sigma \oplus \Sigma) / 2$ and $\oplus$ stands for Kronecker sum. 
+If the provided data satisfies this condition but not the Graphical Lasso condition, find a tighter bound of $c$ through numerical experiments. 
+
+This entire section is constructed based on \citep{meinshausen2008note,ravikumar2011high,zhang2014sparse}.
+
+
+
+\end{enumerate}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\newpage
+\bibliographystyle{abbrvnat}
+\bibliography{ref}
+
+
+
+\end{document}

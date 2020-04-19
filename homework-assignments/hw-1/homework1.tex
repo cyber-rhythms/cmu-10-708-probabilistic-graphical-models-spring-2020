@@ -1,0 +1,934 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{fullpage}
+\usepackage{parskip}
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage{microtype}
+\usepackage{booktabs}
+\usepackage{graphicx,subcaption}
+\usepackage{algorithm}
+\usepackage[round]{natbib}
+\usepackage{tikz-cd}
+\usepackage{xcolor}
+\usepackage{algpseudocode}
+\usepackage{hyperref}
+\usepackage[most]{tcolorbox}
+\newtcolorbox[]{solution}[1][]{%
+    breakable,
+    enhanced,
+    colback=white,
+    title=Solution,
+    #1
+}
+\usepackage{xcolor} %hilight
+\newcommand{\hilight}[1]{\colorbox{yellow}{#1}}
+\newcommand{\yiwen}[1]{\textcolor{blue}{#1}}
+ 
+ 
+ 
+ 
+ 
+ 
+%% ---------------------------------
+%\begin{solution}
+%\hilight{TODO}
+%\end{solution}
+%% ---------------------------------
+
+
+
+\usepackage{tikz}
+\newcommand*\circled[1]{
+\tikz[baseline=(char.base)]{\node[shape=circle,draw,inner sep=1pt] (char) {#1};}
+}
+            
+ 
+% xun
+\newcommand{\Gcal}{\mathcal{G}}
+\newcommand{\Ical}{\mathcal{I}}
+\newcommand{\Hcal}{\mathcal{H}}
+\newcommand{\Ucal}{\mathcal{U}}
+\newcommand{\Tcal}{\mathcal{T}}
+\newcommand{\Ncal}{\mathcal{N}}
+\newcommand{\Cbs}{\boldsymbol{C}}
+\newcommand{\Sbs}{\boldsymbol{S}}
+\newcommand{\Pa}{\text{Pa}}
+\newcommand{\De}{\text{De}}
+\newcommand{\Nd}{\text{Nd}}
+            
+
+\title{10-708 PGM (Spring 2020): Homework 1
+}
+\author{
+\begin{tabular}{rl}
+Andrew ID: & [your Andrew ID] \\
+Name: & [your first and last name] \\
+Collaborators: & [Andrew IDs of all collaborators, if any]
+\end{tabular}
+}
+\date{}
+
+
+\begin{document}
+
+\maketitle
+
+
+
+\section{Bayesian Networks [20 Points] (Ben)}
+
+State True or False, and briefly justify your answer within 3 lines. 
+The statements are either direct consequences of theorems in Koller and Friedman (2009, Ch.~3), or have a short proof.
+In the follows, $P$ is a distribution and $\Gcal$ is a BN structure. 
+
+
+\begin{enumerate}
+
+\item \textbf{[2 points]} If $ A \perp B \ | \ C $ and $ A \perp C \ | \ B $, then $ A \perp B $ and $ A \perp C $. 
+(Suppose the joint distribution of $ A, B, C $ is positive.)
+(This is a general probability question not related to BNs.)
+
+
+
+
+% \begin{solution}
+% Your solution here.
+% \end{solution}
+
+
+
+
+
+
+\begin{figure}[h]
+\centering
+\begin{tikzcd}
+A \arrow[r] & B \arrow[r] & C \\
+D \arrow[ur] \arrow[r] & E & 
+\end{tikzcd}
+\caption{A Bayesian network.}
+\label{fig:y-bayesnet}
+\end{figure}
+
+\item \textbf{[2 points]} In Figure~\ref{fig:y-bayesnet}, $ E \perp C \ | \ B $.
+
+
+% \begin{solution}
+% Your solution here.
+% \end{solution}
+
+
+
+
+\item \textbf{[2 points]} In Figure~\ref{fig:y-bayesnet}, $ A \perp E \ | \ C $.
+
+
+
+% \begin{solution}
+% Your solution here.
+% \end{solution}
+
+
+
+
+
+
+\begin{figure}[h]
+\centering
+\begin{tikzcd}
+P \text{ factorizes over } \Gcal  
+\arrow[r, Rightarrow, "(1)"] 
+& \Ical (\Gcal) \subseteq \Ical (P) 
+\arrow[r, Rightarrow, "(2)"] 
+& \Ical_\ell (\Gcal) \subseteq \Ical (P)
+\arrow[ll, Rightarrow, bend left=30, "(3)" above]
+\end{tikzcd}
+\caption{Some relations in Bayesian networks.}
+\label{fig:relations-bayesnet}
+\end{figure}
+
+
+
+Recall the definitions of local and global independences of $ \Gcal $ and independences of $ P $. 
+\begin{align}
+\Ical_\ell (\Gcal) & = \{ (X \perp \text{NonDescendants}_\Gcal (X) \ |\  \text{Parents}_\Gcal (X)) \}   \\
+\Ical (\Gcal) & = \{ (X \perp Y \ |\  Z): \text{d-separated}_\Gcal (X, Y | Z) \}  \\
+\Ical (P) & = \{ (X \perp Y \ | \ Z): P(X, Y | Z) = P(X | Z) P(Y | Z)  \} 
+\end{align}
+
+
+
+\item \textbf{[2 points]} In Figure~\ref{fig:relations-bayesnet}, relation (1) is true.
+
+
+% \begin{solution}
+% Your solution here.
+% \end{solution}
+
+
+
+\item \textbf{[2 points]} In Figure~\ref{fig:relations-bayesnet}, relation (2) is true.
+
+
+% \begin{solution}
+% Your solution here.
+% \end{solution}
+
+
+
+
+\item \textbf{[2 points]} In Figure~\ref{fig:relations-bayesnet}, relation (3) is true.
+
+
+% \begin{solution}
+% Your solution here.
+% \end{solution}
+
+
+
+
+
+\item \textbf{[2 points]} If $ \Gcal $ is an I-map for $ P $, then $ P $ may have extra conditional independencies than $ \Gcal $.
+
+
+% \begin{solution}
+% Your solution here.
+% \end{solution}
+
+
+
+
+\item \textbf{[2 points]} Two BN structures $ \Gcal_1 $ and $ \Gcal_2 $ are I-equivalent iff they have the same skeleton and the same set of v-structures.
+
+
+
+% \begin{solution}
+% Your solution here.
+% \end{solution}
+
+
+
+
+\item \textbf{[2 points]} 
+If $\Gcal_1$ is an I-map of distribution $P$, and $\Gcal_1$ has fewer edges than $\Gcal_2$, then $\Gcal_2$ is not a minimal I-map of $P$.
+
+
+% \begin{solution}
+% Your solution here.
+% \end{solution}
+
+
+
+\item \textbf{[2 points]} The P-map of a distribution, if it exists, is unique. 
+
+% \begin{solution}
+% Your solution here.
+% \end{solution}
+
+
+
+
+
+\end{enumerate}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\newpage
+
+
+\section{Markov Networks [30 points] (Xun)}
+
+
+\newcommand{\horbar}{\rule[.5ex]{2.5ex}{0.5pt}}
+\newcommand{\verbar}{\rule[-1ex]{0.5pt}{2.5ex}}
+\newcommand{\Xbf}{\mathbf{X}}
+\newcommand{\var}{\text{Var}}
+\newcommand{\cov}{\text{Cov}}
+\newcommand{\mubf}{\boldsymbol{\mu}}
+
+
+
+
+
+Let $ \Xbf = (X_1, \dotsc, X_d) $ be a random vector (not necessarily Gaussian) with mean $ \mubf $ and covariance matrix $ \Sigma $. 
+The partial correlation matrix $ R $ of $ \Xbf $ is a $ d \times d $ matrix where each entry $ R_{ij} = \rho (X_i, X_j | \Xbf_{-ij}) $ is the partial correlation between $ X_i $ and $ X_j $ given the $ d-2 $ remaining variables $ \Xbf_{-ij} $.
+Let $ \Theta = \Sigma^{-1} $ be the inverse covariance matrix of $ \Xbf $. 
+
+
+
+We will prove the relation between $ R $ and $ \Theta $, and furthermore how $ \Theta $ characterizes conditional independence in Gaussian graphical models. 
+
+
+
+
+
+\begin{enumerate}
+\item 
+\textbf{[10 points]}
+Show that 
+\begin{align}
+\begin{pmatrix}
+\Theta_{ii} & \Theta_{ij} \\
+\Theta_{ji} & \Theta_{jj}
+\end{pmatrix}
+= \begin{pmatrix}
+\var [e_i] & \cov [e_i, e_j] \\
+\cov [e_i, e_j] & \var [e_j]
+\end{pmatrix}^{-1}
+\end{align}
+for any $ i, j \in [d] $, $ i \ne j $. 
+Here $ e_i $ is the residual resulting from the linear regression of $ \Xbf_{-ij} $ to $ X_i $, and similarly $ e_j $ is the residual resulting from the linear regression of $ \Xbf_{-ij} $ to $ X_j $. 
+
+
+
+
+% \begin{solution}
+% Your solution here.
+% \end{solution}
+
+
+
+
+
+
+\item 
+\textbf{[10 points]}
+Show that
+\begin{align}
+R_{ij}
+= - \frac{\Theta_{ij}}{\sqrt{\Theta_{ii}} \sqrt{\Theta_{jj}}}
+\end{align}
+
+
+
+
+
+
+
+% \begin{solution}
+% Your solution here.
+% \end{solution}
+
+
+
+
+
+
+
+
+\item 
+\textbf{[10 points]}
+From the above result and the relation between independence and correlation, we know $ \Theta_{ij} = 0 \iff R_{ij} = 0 \impliedby $ $ X_i \perp  X_j \ | \ \Xbf_{-ij} $. 
+Note the last implication only holds in one direction. 
+
+Now suppose $ \Xbf \sim N(\mubf, \Sigma) $ is jointly Gaussian.
+Show that $ R_{ij} = 0 \implies $ $ X_i \perp  X_j \ | \ \Xbf_{-ij} $. 
+
+
+
+
+% \begin{solution}
+% Your solution here.
+% \end{solution}
+
+
+
+
+
+\end{enumerate}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\newpage
+
+\section{Exact Inference [20 points] (Yiwen)}
+
+
+Reference materials for this problem: 
+\begin{itemize}
+    \item Jordan textbook Ch.~3, available at 
+    
+    {\texttt{https://people.eecs.berkeley.edu/~jordan/prelims/chapter3.pdf}}
+    \item Koller and Friedman (2009, Ch.~9 and Ch.~10)
+\end{itemize}
+
+
+
+\subsection{Variable elimination on a grid [10 points]}
+
+Consider the following Markov network:
+
+\begin{figure}[h]
+\centering
+\begin{tikzcd}
+A \arrow[r, dash] & B \arrow[r, dash] & C \\
+D \arrow[r, dash] \arrow[u, dash] & E \arrow[r, dash] \arrow[u, dash] & F \arrow[u, dash] \\
+G \arrow[r, dash] \arrow[u, dash] & H \arrow[r, dash] \arrow[u, dash] & I \arrow[u, dash]
+\end{tikzcd}
+\end{figure}
+
+
+We are going to see how \emph{tree-width}, a property of the graph, is related to the intrinsic complexity of variable elimination of a distribution. 
+
+
+\begin{enumerate}
+
+\item \textbf{[2 points]} Write down largest clique(s) for the elimination order $ E, D, H, F, B, A, G, I, C $.
+
+% \begin{solution}
+% Your solution here.
+% \end{solution}
+
+
+
+
+
+\item \textbf{[2 points]} Write down largest clique(s) for the elimination order $ A, G, I, C, D, H, F, B, E $. 
+
+% \begin{solution}
+% Your solution here.
+% \end{solution}
+
+
+
+\item \textbf{[2 points]} Which of the above ordering is preferable? Explain briefly. 
+
+% \begin{solution}
+% Your solution here.
+% \end{solution}
+
+
+
+\item \textbf{[4 points]} Using this intuition, give a reasonable $ (\ll n^2) $ upper bound on the tree-width of the $ n \times n $ grid. 
+
+% \begin{solution}
+% Your solution here.
+% \end{solution}
+
+
+
+
+\end{enumerate}
+
+\subsection{Junction tree {(a.k.a Clique Tree)} [10 points]}
+
+
+
+Consider the following Bayesian network $ \Gcal $:
+\begin{figure}[h]
+\centering
+\begin{tikzcd}
+A \arrow[r] \arrow[rd] & B \arrow[r] & C \arrow[d] \\
+& E \arrow[r] &  D  
+\end{tikzcd}
+\end{figure}
+
+We are going to construct a junction tree $ \Tcal $ from $ \Gcal $.
+Please sketch the generated objects in each step.
+
+\begin{enumerate}
+\item \textbf{[1 points]} Moralize $ \Gcal $ to construct an undirected graph $ \Hcal $.
+
+% \begin{solution}
+% Your solution here.
+% \end{solution}
+
+
+
+
+\item \textbf{[3 points]} Triangulate $ \Hcal $ to construct a chordal graph $ \Hcal^* $. 
+
+(Although there are many ways to triangulate a graph, for the ease of grading, please try adding fewest additional edges possible.)
+
+% \begin{solution}
+% Your solution here.
+% \end{solution}
+
+
+
+
+
+\item \textbf{[3 points]} Construct a cluster graph $ \Ucal $ where each node is a maximal clique $ \Cbs_i $ from $ \Hcal^* $ and each edge is the sepset $ \Sbs_{i,j} = \Cbs_i \cap \Cbs_j $ between adjacent cliques $ \Cbs_i $ and $ \Cbs_j $. 
+
+
+% \begin{solution}
+% Your solution here.
+% \end{solution}
+
+
+
+\item \textbf{[3 points]} 
+The junction tree $ \Tcal $ is the maximum spanning tree of $ \Ucal $. 
+
+(The cluster graph is small enough to calculate maximum spanning tree in one's head.)
+
+% \begin{solution}
+% Your solution here.
+% \end{solution}
+
+
+
+
+\end{enumerate}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\newpage
+
+
+\section{Parameter Estimation [30 points] (Xun)}
+
+
+% \begin{figure}[h]
+% \centering
+% \begin{tikzcd}
+% Y_1 \arrow[r] \arrow[d] & Y_2 \arrow[r] \arrow[d] & \cdots \arrow[r] & Y_T \arrow[d] \\
+% X_1  &  X_2  & & X_T
+% \end{tikzcd}
+% \end{figure}
+
+% Consider an HMM with $ Y_t \in [M] $, $ X_t \in \mathbb{R}^{K} $ ($ M, K \in \mathbb{N} $).
+% Let $ (\pi, A, \{\mu_i, \sigma_i^2\}_{i=1}^M) $ be its parameters, where $ \pi \in \mathbb{R}^{M} $ is the initial state distribution, $ A \in \mathbb{R}^{M \times M} $ is the transition matrix, $ \mu_i \in \mathbb{R}^{K} $ and $ \sigma_i^2 > 0 $ are parameters of the emission distribution, which is defined to be an isotropic Gaussian. 
+% In other words,
+% \begin{align}
+% P(Y_1 = i) & = \pi_{i} \\
+% P(Y_{t+1} = j | Y_t = i) & = A_{ij} \\
+% P(X_t | Y_t = i) & = \Ncal(X_t; \mu_i, \sigma_i^2 I).
+% \end{align}
+
+
+% We are going to implement the Baum-Welch (EM) algorithm that estimates parameters from data $ \boldsymbol{X} \in \mathbb{R}^{N \times T \times K} $, which is a collection of $ N $ observed sequences of length $ T $. 
+% Note that there are different forms of forward-backward algorithms, for instance the $ (\alpha,\gamma) $-recursion, which is slightly different from the $ (\alpha,\beta)$-recursion we saw in the class. 
+% For the ease of grading, however, please implement the $ (\alpha,\beta) $ version, and remember to normalize the messages at each step for numerical stability.
+
+
+% Please complete the unimplemented TODO blocks in the template \verb|baum_welch.py| and submit it to Gradescope (\verb|https://www.gradescope.com/courses/36025|).
+% The template has its own toy problem to verify the implementation. 
+% The test cases are ran on other randomly generated problem instances.
+
+
+% \newcommand{\zvec}{\mathbf{z}}
+
+
+
+\newcommand{\zvec}{\mathbf{z}}
+\newcommand{\xvec}{\mathbf{x}}
+\newcommand{\Rbb}{\mathbb{R}}
+\newcommand{\vpi}{\boldsymbol{\pi}}
+\newcommand{\vphi}{\boldsymbol{\phi}}
+\newcommand{\muvec}{\boldsymbol{\mu}}
+\newcommand{\empirical}{\widehat{p}}
+\newcommand{\Ebb}{\mathbb{E}}
+\newcommand{\sbr}[1]{\left[#1\right]}
+\newcommand*{\argmax}{\mathop{\mathrm{argmax}}}
+\newcommand{\alphahat}{\hat{\alpha}}
+\newcommand{\alphatil}{\tilde{\alpha}}
+\newcommand{\betahat}{\hat{\beta}}
+\newcommand{\betatil}{\tilde{\beta}}
+
+
+Consider an HMM with $ T $ time steps, $ M $ discrete states, and $ K $-dimensional observations as in Figure~\ref{fig:hmm}, where $ \zvec_t \in \{0,1\}^M $, $ \sum_s z_{ts} = 1 $, $ \xvec_t \in \Rbb^K $ for $ t \in [T] $.
+
+\begin{figure}[h]
+\centering
+\begin{tikzcd}
+\zvec_1 \arrow[r] \arrow[d] & \zvec_2 \arrow[r] \arrow[d] & \cdots \arrow[r] & \zvec_T \arrow[d] \\
+\xvec_1  &  \xvec_2  & & \xvec_T
+\end{tikzcd}
+\caption{A hidden Markov model.}
+\label{fig:hmm}
+\end{figure}
+%
+The joint distribution factorizes over the graph:
+\begin{align}\label{eqn:joint-factorization}
+p(\xvec_{1:T}, \zvec_{1:T})
+& = 
+p(\zvec_1) 
+\prod_{t=2}^{T} p(\zvec_t | \zvec_{t-1} )  
+\prod_{t=1}^{T} p(\xvec_t | \zvec_t).
+\end{align}
+%
+Now consider the parameterization of CPDs. 
+Let $ \vpi \in \mathbb{R}^{M} $ be the initial state distribution and $ A \in \mathbb{R}^{M \times M} $ be the transition matrix.
+The emission density $ f(\cdot) $ is parameterized by $ \vphi_i $ at state $ i $.
+In other words,
+\begin{align}
+& p(z_{1i} = 1)  = \pi_i, & 
+& p(\zvec_1) = \prod_{i=1}^{M} \pi_i^{z_{1i}}, & 
+&  & \\
+& p(z_{tj} = 1 | z_{t-1,i} = 1)  = a_{ij}, & 
+& p(\zvec_t | \zvec_{t-1}) = \prod_{i=1}^{M} \prod_{j=1}^{M} a_{ij}^{ z_{t-1,i} z_{tj} }, & 
+& t =2, \dotsc, T & \\
+& p(\xvec_t | z_{ti} = 1) = f(\xvec_t; \vphi_i), & 
+& p(\xvec_t | \zvec_t) = \prod_{i=1}^{M} f(\xvec_t; \vphi_i)^{ z_{ti} } , & 
+& t = 1, \dotsc, T. &
+\end{align}
+Let $ \theta = (\vpi, A, \{ \vphi_i \}_{i=1}^M) $ be the set of parameters of the HMM.
+Given the empirical distribution $ \empirical $ of $ \xvec_{1:T} $, we would like to find MLE of $ \theta $ by solving the following problem:
+\begin{align}
+\max_\theta \ \Ebb_{\xvec_{1:T} \sim \empirical} \sbr{ \log p_\theta(\xvec_{1:T})  }.
+\end{align}
+However the marginal likelihood is intractable due to summation over $ M^T $ terms:
+\begin{align}
+p_\theta(\xvec_{1:T}) 
+= \sum_{\zvec_{1:T}} p_\theta(\xvec_{1:T}, \zvec_{1:T}).
+\end{align}
+An alternative is to use the EM algorithm as we saw in the class. 
+
+
+\begin{enumerate}
+
+\item 
+\textbf{[10 points]}
+Show that the EM updates can take the following form:
+\begin{align}
+\theta^{*} \gets \argmax_\theta \  
+\Ebb_{
+\xvec_{1:T} \sim \empirical}  \sbr{ 
+F(\xvec_{1:T}; \theta)
+}
+\end{align}
+where 
+\begin{align}
+F(\xvec_{1:T}; \theta)
+& \coloneqq
+\sum_{i=1}^{M} \gamma(z_{1i}) \log \pi_i
++ \sum_{t=2}^{T} \sum_{i=1}^{M} \sum_{j=1}^{M} \xi(z_{t-1,i}, z_{tj}) \log a_{ij}  + \sum_{t=1}^{T} \sum_{i=1}^{M} \gamma(z_{ti}) \log f(\xvec_t; \vphi_i)
+\end{align}
+and  $ \gamma $ and $ \xi $ are the posterior expectations over current parameters $ \hat{\theta} $:
+\begin{align}
+\gamma(z_{ti}) & \coloneqq \Ebb_{
+\zvec_{1:T} \sim p_{\hat{\theta}} (\zvec_{1:T} | \xvec_{1:T}) }\sbr{ 
+z_{ti} 
+} 
+= p_{\hat{\theta}} (z_{ti} = 1| \xvec_{1:T}), \quad t = 1, \dotsc, T \\
+\xi(z_{t-1,i}, z_{tj}) & \coloneqq \Ebb_{
+\zvec_{1:T} \sim p_{\hat{\theta}} (\zvec_{1:T} | \xvec_{1:T}) } \sbr{ 
+z_{t-1,i} z_{tj}  
+}
+= p_{\hat{\theta}} (z_{t-1,i} z_{tj} = 1| \xvec_{1:T}), \quad t = 2, \dotsc, T 
+\end{align}
+
+
+
+
+
+
+% \begin{solution}
+% Your solution here.
+% \end{solution}
+
+
+
+
+
+
+\item 
+\textbf{[0 points]}
+(No need to answer.)
+Suppose $ \gamma $ and $ \xi $ are given, and we use isotropic Gaussian $ \xvec_t | z_{ti} = 1 \sim N (\muvec_i, \sigma_i^2 I) $ as the emission distribution. 
+Then the parameter updates have the following closed form:
+\begin{align}
+\pi_i^* & \propto \Ebb_{
+\xvec_{1:T} \sim \empirical}  \sbr{ 
+\gamma(z_{1i})
+} \\
+a_{ij}^* & \propto \Ebb_{
+\xvec_{1:T} \sim \empirical}  \sbr{ 
+\sum_{t=2}^{T} \xi(z_{t-1,i}, z_{tj})
+} \\
+\mu_{ik}^* & = 
+\frac{ \Ebb_{
+\xvec_{1:T} \sim \empirical}  \sbr{ 
+\sum_{t=1}^T \gamma(z_{ti}) \xvec_t  }
+}{  \Ebb_{
+\xvec_{1:T} \sim \empirical}  \sbr{ 
+\sum_{t=1}^T \gamma(z_{ti})  }
+}  \\
+{\sigma_i^2}^*  & = 
+\frac{ \Ebb_{
+\xvec_{1:T} \sim \empirical}  \sbr{ 
+\sum_{t=1}^T \gamma(z_{ti})  \| \xvec_t - \muvec_i \|_2^2 } 
+}{ \Ebb_{
+\xvec_{1:T} \sim \empirical}  \sbr{ 
+\sum_{t=1}^T \gamma(z_{ti}) K }
+}
+\end{align}
+
+ 
+ 
+ 
+\item 
+\textbf{[10 points]}
+We will use the belief propagation algorithm (Koller and Friedman, 2009, Alg.~10.2) to perform inference for \emph{all} marginal queries:
+\begin{align}
+\gamma(\zvec_t) & = p_{\hat{\theta}} (\zvec_t | \xvec_{1:T}),  \quad t = 1, \dotsc, T \\
+\xi(\zvec_{t-1}, \zvec_t) & = p_{\hat{\theta}} (\zvec_{t-1}, \zvec_t | \xvec_{1:T}). \quad t = 2, \dotsc, T
+\end{align}
+For convenience, the notation $ \hat{\theta} $ will be omitted from now on. 
+
+Derive the following BP updates:
+\begin{align}
+\gamma(\zvec_t) 
+& = \frac{1}{Z(\xvec_{1:T})}  \cdot  s (\zvec_t) \\
+\xi(\zvec_{t-1}, \zvec_t) 
+& = \frac{1}{Z(\xvec_{1:T})}  \cdot  c (\zvec_{t-1}, \zvec_t) \\
+\end{align}
+where 
+\begin{align}
+s (\zvec_t)
+& = \alpha (\zvec_t) \beta (\zvec_t), \quad t = 1, \dotsc, T \\
+c (\zvec_{t-1}, \zvec_t) 
+& = p(\zvec_t | \zvec_{t-1}) p(\xvec_t | \zvec_t) \alpha  (\zvec_{t-1}) \beta (\zvec_t), \quad t = 2, \dotsc, T \\
+Z(\xvec_{1:T})
+& = \sum_{\zvec_t} s (\zvec_t)
+\end{align}
+and 
+\begin{align}
+\alpha (\zvec_1) 
+& = p(\zvec_1) p(\xvec_1 | \zvec_1)  \\
+\alpha (\zvec_t) 
+& = p(\xvec_t | \zvec_t) \sum_{\zvec_{t-1}} p(\zvec_t | \zvec_{t-1})  \alpha (\zvec_{t-1}), \quad t = 2, \dotsc, T \\
+\beta (\zvec_{t-1})
+& = \sum_{\zvec_t}  p(\zvec_t | \zvec_{t-1})   p(\xvec_t | \zvec_t)  \beta (\zvec_t) ,
+\quad t = 2, \dotsc, T  \\
+\beta (\zvec_T) 
+& = 1
+\end{align}
+
+
+
+
+% \begin{solution}
+% Your solution here.
+% \end{solution}
+
+
+
+
+\item 
+\textbf{[0 points]} 
+(No need to answer.)
+Implemented as above, the $ (\alpha, \beta) $-recursion is likely to encounter numerical instability due to repeated multiplication of small values. 
+One way to mitigate the numerical issue is to scale $ (\alpha, \beta) $ messages at each step $ t $, so that the scaled values are always in some appropriate range, while not affecting the inference result for $ (\gamma, \xi) $. 
+
+
+
+Recall that the forward message is in fact a joint distribution 
+\begin{align}
+\alpha (\zvec_t) = p(\xvec_{1:t}, \zvec_t).
+\end{align}
+%
+Define scaled messages by re-normalizing $ \alpha $ w.r.t. $ \zvec_t $:
+\begin{align}
+\alphahat (\zvec_t) 
+& \coloneqq \frac{1}{Z(\xvec_{1:t})} \cdot \alpha (\zvec_t) , \\
+Z(\xvec_{1:t}) 
+& = \sum_{\zvec_t} \alpha (\zvec_t).
+\end{align}
+%Effectively, it prevents small values by scaling $ \alpha (\zvec_t) $ by $ 1 / p(\xvec_{1:t}) $.
+Furthermore, define 
+\begin{align}
+r_1 
+& \coloneqq Z(\xvec_1) , \\
+r_t 
+& \coloneqq \frac{Z(\xvec_{1:t})}{Z(\xvec_{1:t-1})}.  \quad t = 2, \dotsc, T  \label{eqn:r-t}
+\end{align}
+Notice that $ Z(\xvec_{1:t}) = r_1 \cdots r_t $, hence
+\begin{align}
+\alphahat (\zvec_t) = \frac{1}{r_1 \cdots r_t} \cdot  \alpha (\zvec_t).
+\end{align}
+Plugging $ \alphahat $ into forward messages, the new $ \alphahat $-recursion is
+\begin{align}
+\alphahat (\zvec_1) 
+& = \frac{1}{r_1} \cdot 
+\underbrace{
+p(\zvec_1) p(\xvec_1 | \zvec_1) 
+}_{\alphatil (\zvec_1)}\\
+\alphahat (\zvec_t) 
+& = \frac{1}{r_t} \cdot 
+\underbrace{
+p(\xvec_t | \zvec_t) \sum_{\zvec_{t-1}} p(\zvec_t | \zvec_{t-1})   \alphahat (\zvec_{t-1})
+}_{\alphatil (\zvec_t)}   . \quad t = 2, \dotsc, T
+\end{align}
+Since $ \alphahat $ is normalized, each $ r_t $ serves as the normalizing constant:
+\begin{align}
+r_t & =  \sum_{\zvec_t} \alphatil (\zvec_t)  .
+\end{align}
+%
+Now switch focus to $ \beta $.
+In order to make the inference for $ (\gamma, \xi) $ invariant of scaling, $ \beta $ has to be scaled in a way that counteracts the scaling on $ \alpha $. 
+Plugging $ \alphahat $ into the marginal queries,
+\begin{align}
+\gamma (\zvec_t) 
+& = \frac{1}{Z(\xvec_{1:T})} \cdot r_1 \cdots r_t \cdot  \alphahat (\zvec_t) \beta (\zvec_t)  , \\
+\xi(\zvec_{t-1}, \zvec_t) 
+& = \frac{1}{Z(\xvec_{1:T})} \cdot p(\zvec_t | \zvec_{t-1}) p(\xvec_t | \zvec_t)   \cdot r_1 \cdots r_{t-1} \cdot  \alphahat  (\zvec_{t-1}) \beta (\zvec_t) .
+\end{align}
+Since $ Z(\xvec_{1:T}) = r_1 \dotsc r_T $, a natural scaling scheme for $ \beta $ is
+\begin{align}
+\betahat (\zvec_{t-1}) 
+& \coloneqq \frac{1}{r_t \cdots r_T} \cdot \beta (\zvec_{t-1}),  \quad t = 2, \dotsc, T \\
+\betahat (\zvec_T) 
+& \coloneqq \beta (\zvec_T),
+\end{align}
+which simplifies the expression for marginals $ (\gamma, \xi) $ to
+\begin{align}
+\gamma (\zvec_t)  
+& = \alphahat (\zvec_t) \betahat (\zvec_t) , \\
+\xi(\zvec_{t-1}, \zvec_t) 
+& = \frac{1}{r_t} \cdot p(\zvec_t | \zvec_{t-1}) p(\xvec_t | \zvec_t)   \alphahat  (\zvec_{t-1}) \betahat (\zvec_t).
+\end{align}
+%
+The new $ \betahat $-recursion can be obtained by plugging $ \betahat $ into backward messages:
+\begin{align}
+\betahat (\zvec_{t-1}) 
+& = \frac{1}{r_t}  \cdot \sum_{\zvec_t} p(\zvec_t | \zvec_{t-1})   p(\xvec_t | \zvec_t) \betahat (\zvec_t) ,
+\quad t = 2, \dotsc, T  \\
+\betahat (\zvec_T) 
+& = 1.
+\end{align}
+%
+In other words, $ \betahat (\zvec_{t-1}) $ is scaled by $ 1 / r_t $, the normalizer of $ \alphahat (\zvec_t) $.
+
+The full algorithm is summarized below.
+ 
+
+\begin{algorithm}[h]
+\caption{Exact inference for $ (\gamma, \xi) $}
+\vspace{1ex}
+\begin{enumerate} %[itemsep=1ex]
+\item Scaled forward message for $ t = 1 $:
+\begin{align}
+\alphatil (\zvec_1) 
+& = p(\zvec_1) p(\xvec_1 | \zvec_1)  \\
+r_1 
+& =  \sum_{\zvec_1} \alphatil (\zvec_1) \\
+\alphahat (\zvec_1) 
+& = \frac{1}{r_1} \cdot \alphatil (\zvec_1)
+\end{align}
+
+\item Scaled forward message for $ t = 2, \dotsc, T $:
+\begin{align}
+\alphatil (\zvec_t) 
+& = p(\xvec_t | \zvec_t) \sum_{\zvec_{t-1}} p(\zvec_t | \zvec_{t-1})   \alphahat (\zvec_{t-1})  \\
+r_t  
+& =  \sum_{\zvec_t} \alphatil (\zvec_t)  \\
+\alphahat (\zvec_t) 
+& = \frac{1}{r_t} \cdot \alphatil (\zvec_t)
+\end{align}
+
+\item Scaled backward message for $ t = T + 1 $:
+\begin{align}
+\betahat (\zvec_T)  = 1
+\end{align}
+
+\item Scaled backward message for $ t = T, \dotsc, 2 $:
+\begin{align}
+\betahat (\zvec_{t-1}) 
+& = \frac{1}{r_t}  \cdot \sum_{\zvec_t} p(\zvec_t | \zvec_{t-1})   p(\xvec_t | \zvec_t) \betahat (\zvec_t)
+\end{align}
+
+\item Singleton marginal for $ t = 1, \dotsc, T $:
+\begin{align}
+\gamma (\zvec_t)  
+= \alphahat (\zvec_t) \betahat (\zvec_t)
+\end{align}
+
+\item Pairwise marginal for $ t = 2, \dotsc, T $:
+\begin{align}
+\xi(\zvec_{t-1}, \zvec_t) 
+= \frac{1}{r_t} \cdot p(\zvec_t | \zvec_{t-1}) p(\xvec_t | \zvec_t)   \alphahat  (\zvec_{t-1}) \betahat (\zvec_t)
+\end{align}
+
+%\item Partition function: 
+%\begin{align}
+%Z(\xvec_{1:T}) = r_1 \cdots r_T
+%\end{align}
+
+\end{enumerate}
+\end{algorithm}
+
+
+
+
+
+\item 
+\textbf{[10 points]}
+We will implement the EM algorithm (also known as Baum-Welch algorithm), where E-step performs exact inference and M-step updates parameter estimates.
+Please complete the TODO blocks in the provided template \verb|baum_welch.py| and submit it to Gradescope.
+The template contains a toy problem to play with. 
+The submitted code will be tested against randomly generated problem instances. 
+
+
+
+
+
+
+\end{enumerate}
+
+
+
+
+
+
+
+% \newpage
+% \bibliographystyle{abbrvnat}
+% \bibliography{pgm}
+
+
+
+\end{document}

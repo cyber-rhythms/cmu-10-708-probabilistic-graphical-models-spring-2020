@@ -1,0 +1,454 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{fullpage}
+\usepackage{parskip}
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage{microtype}
+\usepackage{booktabs}
+\usepackage{graphicx,subcaption}
+\usepackage{algorithm}
+\usepackage{algorithmicx}
+\usepackage[round]{natbib}
+\usepackage{tikz-cd}
+\usepackage{xcolor}
+\usepackage{algpseudocode}
+\usepackage{hyperref}
+\usepackage[most]{tcolorbox}
+\newtcolorbox[]{solution}[1][]{%
+    breakable,
+    enhanced,
+    colback=white,
+    title=Solution,
+    #1
+}
+\usepackage{xcolor} %hilight
+\newcommand{\hilight}[1]{\colorbox{yellow}{#1}}
+ \newcommand{\yiwen}[1]{\textcolor{blue}{#1}}
+\newcommand{\yv}{\mathbf{y}}
+\newcommand{\gau}[1]{\mathcal{N}\bb{#1}}
+\newcommand{\alphav     }{\boldsymbol \alpha     }
+\newcommand{\betav      }{\boldsymbol \beta      }
+\newcommand{\gammav     }{\boldsymbol \gamma     }
+\newcommand{\deltav     }{\boldsymbol \delta     }
+\newcommand{\epsilonv   }{\boldsymbol \epsilon   }
+\newcommand{\zetav      }{\boldsymbol \zeta      }
+\newcommand{\etav       }{\boldsymbol \eta       }
+\newcommand{\thetav     }{\boldsymbol \theta     }
+\newcommand{\varthetav  }{\boldsymbol \vartheta  }
+\newcommand{\iotav      }{\boldsymbol \iota      }
+\newcommand{\kappav     }{\boldsymbol \kappa     }
+\newcommand{\varkappav  }{\boldsymbol \varkappa  }
+\newcommand{\lambdav    }{\boldsymbol \lambda    }
+\newcommand{\muv        }{\boldsymbol \mu        }
+\newcommand{\nuv        }{\boldsymbol \nu        }
+\newcommand{\xiv        }{\boldsymbol \xi        }
+\newcommand{\omicronv   }{\boldsymbol \omicron   }
+\newcommand{\piv        }{\boldsymbol \pi        }
+\newcommand{\varpiv     }{\boldsymbol \varpi     }
+\newcommand{\rhov       }{\boldsymbol \rho       }
+\newcommand{\varrhov    }{\boldsymbol \varrho    }
+\newcommand{\sigmav     }{\boldsymbol \sigma     }
+\newcommand{\varsigmav  }{\boldsymbol \varsigma  }
+\newcommand{\tauv       }{\boldsymbol \tau       }
+\newcommand{\upsilonv   }{\boldsymbol \upsilon   }
+\newcommand{\phiv       }{\boldsymbol \phi       }
+\newcommand{\varphiv    }{\boldsymbol \varphi    }
+\newcommand{\chiv       }{\boldsymbol \chi       }
+\newcommand{\psiv       }{\boldsymbol \psi       }
+\newcommand{\omegav     }{\boldsymbol \omega     }
+%% ---------------------------------
+%\begin{solution}
+%\hilight{TODO}
+%\end{solution}
+%% ---------------------------------
+
+
+
+\usepackage{tikz}
+\newcommand*\circled[1]{
+\tikz[baseline=(char.base)]{\node[shape=circle,draw,inner sep=1pt] (char) {#1};}
+}
+
+
+
+
+\title{10-708 PGM (Spring 2020): Homework 2
+% {\color{red} v1.1}
+}
+\author{
+\begin{tabular}{rl}
+Andrew ID: & [your Andrew ID] \\
+Name: & [your first and last name] \\
+Collaborators: & [Andrew IDs of all collaborators, if any]
+\end{tabular}
+}
+\date{}
+
+
+\begin{document}
+
+\maketitle
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\section{Variational Inference [40 points] (Junxian)}
+
+\newcommand{\Eb}{\mathbb{E}}
+\newcommand{\defeq}{\mathrel{\mathop:}=}
+\newcommand{\av}{\mathbf{a}}
+\newcommand{\bv}{\mathbf{b}}
+\newcommand{\cv}{\mathbf{c}}
+\newcommand{\dv}{\mathbf{d}}
+\newcommand{\ev}{\mathbf{e}}
+\newcommand{\fv}{\mathbf{f}}
+\newcommand{\gv}{\mathbf{g}}
+\newcommand{\hv}{\mathbf{h}}
+\newcommand{\iv}{\mathbf{i}}
+\newcommand{\jv}{\mathbf{j}}
+\newcommand{\kv}{\mathbf{k}}
+\newcommand{\lv}{\mathbf{l}}
+\newcommand{\mv}{\mathbf{m}}
+\newcommand{\nv}{\mathbf{n}}
+\newcommand{\ov}{\mathbf{o}}
+\newcommand{\pv}{\mathbf{p}}
+\newcommand{\qv}{\mathbf{q}}
+\newcommand{\rv}{\mathbf{r}}
+\newcommand{\sv}{\mathbf{s}}
+\newcommand{\tv}{\mathbf{t}}
+\newcommand{\uv}{\mathbf{u}}
+\newcommand{\vv}{\mathbf{v}}
+\newcommand{\wv}{\mathbf{w}}
+\newcommand{\xv}{\mathbf{x}}
+% \newcommand{\yv}{\mathbf{y}}
+\newcommand{\zv}{\mathbf{z}}
+
+\newcommand{\Iv}{\mathbf{I}}
+
+\newcommand{\xdn}{x_{dn}}
+\newcommand{\zdn}{z_{dn}}
+\newcommand{\tdn}{t_{dn}}
+\newcommand{\wdn}{w_{dn}}
+\newcommand{\nd}{N_d}
+
+\newcommand{\prodn}{\prod_{n=1}^{N_d}}
+\newcommand{\prodk}{\prod_{k=1}^K}
+\newcommand{\prodd}{\prod_{d=1}^D}
+\newcommand{\prodv}{\prod_{v=1}^V}
+
+\newcommand{\sumd}{\sum_d}
+\newcommand{\sumnn}{\sum_n}
+\newcommand{\sumk}{\sum_k}
+\newcommand{\sumv}{\sum_v}
+\newcommand{\sumdn}{\sum_{d, n}}
+\newcommand{\sumdnk}{\sum_{d, n, k}}
+
+\newcommand{\ebq}{\Eb_q}
+\newcommand{\elbo}{\text{ELBO}}
+\newcommand{\psione}{\psi_{k1}}
+\newcommand{\psitwo}{\psi_{k2}}
+\newcommand{\pidnk}{\pi_{dnk}}
+\newcommand{\px}{p(x)}
+\newcommand{\qx}{q(x)}
+
+In this problem, we are going to work with approximate posterior inference via variational inference for a given topic model. 
+
+The standard Latent Dirichlet Allocation model only models the word co-occurrences, without considering temporal information, i.e. the time when a document is generated. However, a large number of subjects in documents change dramatically over time. It is important to interpret the topics in the context of the timestamps of the documents. To address how topics occur and shift over time, Topics on Time (TOT) model was proposed, by explicitly modeling of time jointly with word co-occurrence patterns ~\citep{wang2006topics}. The model is shown in Figure \ref{fig:tot_model}.
+
+\begin{figure}[!ht]
+	\centering
+	\includegraphics[width=0.5\columnwidth]{TOT_graph}
+	\caption{TOT Model}
+	\label{fig:tot_model}
+\end{figure}
+
+In the model, there are $D$ documents. Each document $d$ contains $N_d$ words $w_{d1}, w_{d2}, ..., w_{dN_d}$. Each word $w_{di}$ has a timestamp $t_{di}\in(0, 1)$, indicating when the document is generated in a relative time scale $(0, 1)$. All words in the same document have the same timestamp. There are $K$ topics (also $T=K$ topics for the notation in the paper and Figure \ref{fig:tot_model}) in the document corpora. Each topic follows a multinomial distribution $\phi$ over the $V$ words in the vocabulary. Each document follows a multinomial distribution $\theta$ over the $K$ topics. The prior distribution for $\phi$ and $\theta$ are Dirichlet distributions with parameters $\beta$ and $\alpha$ respectively. For each topic $k$, the temporal occurrence follows a Beta distribution $Beta(\psi_{k1}, \psi_{k2})$, where $\psi_{k} = (\psi_{k1}, \psi_{k2})$ and we use $\psiv \in \mathbb{R}_{+}^{K\times 2}$ to denote $\psi_k$ for all topics. Each word $w_{di}$ and its timestamp $t_{di}$ are assumed to be generated from a topic, with a topic label $z_{di}\in\{1, ..., K\}$. 
+
+The generative process of this model is described as follows. \\
+
+\noindent\fbox{
+	\begin{minipage}{0.97\textwidth}
+\begin{itemize}
+	\item[] 1. Draw $K$ multinomials $\phi_{k}$ from a Dirichlet prior $\beta$, one for each topic $k$. 
+	\item[] 2. For each document $d$, 
+	\begin{itemize}
+		\item Draw a multinomial $\theta_d$ from a Dirichlet prior $\alpha$;
+		\item For each word $w_{di}$ in document $d$,
+		\begin{itemize}
+			\item[](a) Sample a topic $z_{di}$ from multinomial $\theta_d$;
+			\item[](b) Sample a word $w_{di}$ from multinomial $\phi_{z_{di}}$;			
+			\item[](c) Sample a timestamp $t_{di}$ from Beta $\psi_{z_{di}}$.
+		\end{itemize}
+	\end{itemize}
+\end{itemize}		
+	\end{minipage}
+}\\
+
+We use variational EM to approximate the posterior of latent variables and learn model parameters. To do this, a mean field variational distribution needs to be defined, which is parameterized by some parameters called variational parameters. The variational EM algorithm iteratively performs two steps: 1) in the E step, variational parameters are updated; 2) in the M step, model parameters are optimized. Same as in the paper, we consider $\alpha$ and $\beta$ are predefined fixed hyperparameters with no need to update. Therefore, in M step, only the other model parameters are optimized. The pseudo-code for the proposed algorithm is shown in Algorithm \ref{alg:vi_em}.
+
+\begin{algorithm}[H]
+    \centering
+    \caption{Pseudo-code of variational EM algorithm for TOT model}
+    \label{alg:vi_em}
+  \begin{algorithmic}[1]
+	\State {\bf Input}: Observations, Topic number $K$, MaxIter, and other optional parameters
+	\State {\bf Output}: Posterior distributions for latent variables, optimized model parameters
+	\State Initialize parameters;
+	\State Compute and record ELBO with initial parameters
+	\For{$k\leftarrow 1$ to $MaxIter$}
+    \State Update variational variables \Comment{Stage 1: E-Step}
+    \State Update $\psiv$ with projected Newton method \Comment{Stage 2: M-Step}
+    \State Compute and record ELBO	
+\EndFor
+\end{algorithmic}
+\end{algorithm}
+
+In the TOT model, $\thetav, \zv, \phiv$ are latent variables and $\psiv$ is the model parameter to be learned. As a start, we use mean-field variational inference and the variational distribution has the form:
+\begin{equation}
+\label{eq:vi-q}
+q(\thetav, \phiv, \zv | \gammav, \lambdav, \piv) = \prod_{k=1}^Kq(\phi_k|\lambda_k)\prod_{d=1}^D\big[q(\theta_d|\gamma_d)\prod_{n=1}^{N_d}q(\zdn|\pi_{dn})\big],
+\end{equation}
+where $\gammav, \lambdav, \piv$ are variational parameters that need to be updated in E-step.
+
+Next, we write out the joint distribution of latent and observed variables:
+\begin{equation}
+\label{eq:vi-joint}
+p(\xv, \tv, \phiv, \thetav, \zv | \alpha, \beta, \psiv) = \prodk p(\phi_k | \beta) \prodd[p(\theta_d | \alpha)\prodn p(\zdn | \theta_d)p(\xdn | \zdn, \phiv)p(\tdn | \zdn, \psiv)]
+\end{equation}
+
+Given Eq.~\ref{eq:vi-q} and~\ref{eq:vi-joint}, we can write out ELBO with:
+\begin{equation}
+\label{eq:vi-elbo}
+\text{ELBO} = \Eb_{q(\thetav, \phiv, \zv)}[\log p(\xv, \tv, \phiv, \thetav, \zv) - \log q(\thetav, \phiv, \zv)].
+\end{equation}
+Variational EM basically maximizes ELBO w.r.t. variational parameters and model parameters in E- and M-step respectively.
+
+\textbf{Questions:}
+\begin{enumerate}
+	\item \textbf{[10 points]} Update variational parameters\\
+	Derive the update equations of variational parameters, and also specify their distributions. Here you can directly use the conclusion below for the derivation.
+	$$q_j^*\propto \exp\{\Eb_{q_{-j}}[\log p(\xv, \tv, \phiv, \thetav, \zv)]\},$$
+	where $\Eb_{q_{-j}}$ denotes expectation over all latent variables excluding variable $j$.
+	
+
+	\item \textbf{[10 points]}Update model parameters\\
+	Derive the update equations of model parameters, as mentioned before, there is no need to update $\alphav$ and $\betav$. For the updating rule of $\psiv$, please be careful that $\psiv$ should be constrained as positive.
+	Hint: For a problem with positive solution ($x> 0$), a projected Newton method could be applied:
+	$$y= (x - H^{-1}g)_{+}$$
+	$$x^{+} = x + \lambda(y - x)$$ 
+	where $x$ is the current variable, $y$ is the projected update, $g$ and $H$ are gradient and Hessian matrix respectively, $\lambda$ is the step size and $x^{+}$ is the updated variable. $(\cdot)_{+}$ is defined as $s_{+} \defeq \max(0, s)$.
+
+	\item \textbf{[20 points]} Detailed variational lower bound\\
+	Based on the variational distributions, expand Eq.~\ref{eq:vi-elbo} to obtain detailed variational lower bound. The result should be as specific as possible, that is, it can be directly used in the implementation. 
+    
+% 	\item Implement this algorithm (12 pts)\\
+% 	Please follow the instructions in the notebook \textbf{\textit{Question\_1.8.ipynb}} and answer some following questions. You may follow Algorithm \ref{alg:vi_em} in your implementation. \emph{In your submission, please print out the notebook as a PDF file and put the PDF file as part of the homework, in the mean time, please also submit the raw jupyter notebook file with filename $Question\_1.8\_yourandrewid.ipynb$.}\\
+\end{enumerate}
+
+
+\noindent
+\textbf{Hint: the problem is designed based on the paper~\citep{wang2006topics}. In the paper, Gibbs sampling was used for posterior inference, and here we are working with variational inference. You may gain better understanding of the model and get some ideas of how to solve the problem by reading the paper. }\\
+
+
+
+
+
+
+
+
+
+\newpage
+\section{Monte Carlo [20 points] (Ben)}
+
+Given a random distribution $p(x)$ on $x = [x_1, ..., x_D]^T \in \mathbb{R}^D$. Suppose we want to perform inference $\mathbb{E}_{p(x)}[f(x)]$ using importance sampling, with $q(x)$ as the proposal distribution. According to importance sampling, we draw $L$ i.i.d. samples $x^{(1)}, ..., x^{(L)}$ from $q(x)$, and we have $$\mathbb{E}_{p(x)}[f(x)] \approx \frac{1}{\sum_{i=1}^L u_i}\sum_{i = 1}^{L} f(x^{(i)})u_i$$
+where the (unnormalized) importance weights $u_i = \frac{p(x^{(i)})}{q(x^{(i)})}$.
+
+\begin{enumerate}
+\item \textbf{[5 points]} Find the mean and variance of the unnormalized importance weights $\mathbb{E}_{q(x)}\left[u_i\right]$ and $\text{Var}_{q(x)}\left[u_i\right]$.
+
+\item \textbf{[5 points]} Prove the following lemma: $\mathbb{E}_{p(x)}\left[\frac{p(x)}{q(x)}\right] \geq 1$, and the equality holds only when $p = q$. 
+
+\item \textbf{[9 points]} A measure of the variability of two components in vector $u = [u_1, ..., u_L]^T$ is given by $\mathbb{E}_{q(x)}\left[ (u_i - u_j)^2 \right]$. Assume that both $p$ and $q$ can be factorized, i.e. $p(x) = \prod_{i=1}^{D} p_i(x_i)$, and $q(x) = \prod_{i=1}^{D} q_i(x_i)$. Show that 
+$\mathbb{E}_{q(x)}\left[ (u_i - u_j)^2 \right]$ has exponential growth with respect to $D$. \\
+
+\item \textbf{[1 points]} Use the conclusion in (c) to explain why the standard importance sampling does not scale well with dimensionality and would blow up in high-dimensional cases. 
+\end{enumerate}
+
+
+
+
+
+
+
+
+
+
+
+
+
+\newpage
+
+\section{MCMC [40 points] (Xiang)}
+\subsection{Multiple Choice [10 points]}
+\begin{enumerate}
+\item \textbf{[5 points]}
+ Which of the following statements is true for the acceptance probability
+$$
+A(x'|x)=\min(1, \dfrac{P(x')Q(x|x')}{P(x)Q(x'|x)})
+$$
+of Metropolis-Hastings algorithm?
+\begin{itemize}
+	\item [A.] It satisfies detailed balance. 
+	\item [B.] We can just evaluate $P(x')$ and $P(x)$ up to a normalization constant.
+	\item [C.] It ensures that the MH algorithm eventually converges to the true distribution.
+	\item [D.] All of the above. 
+\end{itemize}
+
+\item \textbf{[5 points]}
+ Which of the following statements is true for Hamiltonian Monte Carlo in comparison with vanilla MCMC?
+\begin{itemize}
+	\item [A.] It can improve acceptance rate and give better mixing.
+	\item [B.] Stochastic variants can be used to improve performance in large dataset scenarios. 
+	\item [C.] It may not be used for discrete variable. 
+	\item [D.] All of the above. 
+\end{itemize}
+
+\end{enumerate}
+
+
+
+\subsection{Modeling with Markov Chain Monte Carlo [30 points]}
+We are going to use the data from the 2013-2014 Premier League \cite{PL1314} to build a predictive model on the number of goals scored in a single game by the two opponents. Bayesian hierarchical model is a good candidate for this kind of modeling task. We model each team's strength (both attacking and defending) as latent variables. Then in each game, the goals scored by the home team is a random variable conditioned on the attacking strength of the home team and the defending strength of the away team. Similarly, the goals scored by the away team is a random variable conditioned on the attack strength of the away team and the defense strength of the home team. Therefore, the distribution of the scoreline of a specific game is dependent on the relative strength between the home team A and the away team B, which also depends on the relative strength between those teams with their other opponents. 
+
+\begin{table}[h!]
+\centering
+\caption{2013-2014 Premier League teams}
+\small
+\begin{tabular}{|c||c|c|c|c|c|}
+\hline
+ Index & 0 & 1 & 2 & 3 & 4 \\
+\hline
+Team & Arsenal  &  Aston Villa &   Cardiff City &   Chelsea &   Crystal Palace \\
+\hline
+\hline
+ Index & 5 & 6 & 7& 8 &9  \\
+\hline
+Team &  Everton & Fulham  &  Hull City &  Liverpool & Manchester City  \\
+\hline
+\hline
+ Index & 10 & 11 & 12 & 13 & 14  \\
+ \hline
+ Team &  Manchester United &  Newcastle United &   Norwich City &   Southampton & Stoke City  \\
+\hline
+\hline
+Index &  15 & 16 & 17 & 18 & 19 \\
+\hline
+Team & Sunderland & Swansea City & Tottenham Hotspur & West Bromwich Albion & West Ham United \\
+\hline
+\end{tabular}
+\label{tbl:teams}
+\end{table}
+
+Here we consider using the same model as described by \cite{baio2010}. The Premier League has 20 teams, and we index them as in Table \ref{tbl:teams}. Each team would play 38 matches every season (playing each of the other 19 teams home and away), which totals 380 games in the entire season. For the $g$-th game, assume that the index of home team is $h(g)$ and the index of the away team is $a(g)$. the observed number of goals is: 
+
+$$y_{gj}\mid\theta_{gj} = \text{Poisson}(\theta_{gj})$$
+
+where the $\theta = (\theta_{g1}, \theta_{g2})$ represent the scoring intensity in the $g$-th game for the team playing at home ($j = 1$) and away ($j = 2$), respectively. We put a log-linear model for the $\theta$s: 
+
+$$\log\theta_{g1} = home + att_{h(g)} - def_{a(g)}$$
+$$\log\theta_{g2} = att_{a(g)} - def_{h(g)}$$
+
+Note that team strength is broken into attacking and defending strength.  And $home$ represents home-team advantage, and in this model is assumed to be constant across teams. The prior on the home is a normal distribution
+$$home \sim \mathcal{N}(0, \tau_0^{-1})$$ 
+where the precision $\tau_0 = 0.0001$.
+
+The team-specific attacking and defending effects are modeled as exchangeable:
+$$att_{t} \sim \mathcal{N}(\mu_{att}, \tau_{att}^{-1})$$
+$$def_{t} \sim \mathcal{N}(\mu_{def}, \tau_{def}^{-1})$$
+
+We use conjugate priors as the hyper-priors on the attack and defense means and precisions:
+
+$$\mu_{att} \sim \mathcal{N}(0, \tau_1^{-1})$$
+$$\mu_{def} \sim \mathcal{N}(0, \tau_1^{-1})$$
+$$\tau_{att} \sim \text{Gamma}(\alpha, \beta)$$
+$$\tau_{def} \sim \text{Gamma}(\alpha, \beta)$$
+where the precision $\tau_1 = 0.0001$, and we set parameters $\alpha = \beta = 0.1$.
+
+This hierarchical Bayesian model can be represented using a directed acyclic graph as shown in Figure \ref{fig:DAG}. Where the goals of each game $\yv = \{y_{gj} | g = 0,...,379, j = 1,2\}$ are 760 observed variables, and parameters $\mathbf{\thetav} = (home, att_0, ..., att_{19}, def_0, ..., def_{19})$ and hyper-parameters $\mathbf{\etav} = (\mu_{att}, \mu_{def}, \tau_{att}, \tau_{def})$ are unobserved variables that we need to make inference. To ensure identifiability, we enforce a corner constraint on the parameters (pinning one team's parameters to 0,0). Here we use the first team as reference and assign its attacking and defending strength to be 0:
+
+$$att_{0} = def_{0} = 0$$
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width = 0.6\linewidth]{Q2_DAG.png}
+	\caption{The DAG representation of the hierarchical Bayesian model}
+\label{fig:DAG}
+\end{figure}
+
+In this question, we want to estimate the posterior mean of the attacking and defending strength for each team, i.e. $\mathbb{E}_{p(\thetav, \etav | \yv)}[att_i]$, $\mathbb{E}_{p(\thetav, \etav | \yv)}[def_i]$, and $\mathbb{E}_{p(\thetav, \etav | \yv)}[home]$. 
+
+\begin{enumerate}
+\item \textbf{[10 points]} Find the joint likelihood $p(\yv, \thetav, \etav)$.
+\item \textbf{[10 points]} Write down the Metropolis-Hastings algorithm for sampling from posterior $p(\thetav, \etav | \yv)$, and derive the acceptance function for a proposal distribution of your choice (e.g. isotropic Gaussian).
+\item \textbf{[10 points]} Implement the M-H algorithm to inference the posterior distribution. The data can be found from \texttt{premier\_league\_2013\_2014.dat}, which contains a $380 \times 4$ matrix. The first column is the number of goals $y_{g1}$ scored by the home team, the second column is the number of goals  $y_{g2}$ scored by the away team, the third column is the index for the home team $h(g)$, and the fourth column is the index for the away team $a(g)$. 
+Use isotropic Gaussian proposal distribution, $\mathcal{N}(0, \sigma^2 I)$ and 0 as the starting point. Run the MCMC chain for $5000$ steps to burn in and then collect 5000 samples with $t$ steps in between (i.e., run M-H for $5000t$ steps and collect only each $t$-th sample). This is called \textit{thinning}, which reduces the autocorrelation of the MCMC samples introduced by the Markovian process. The parameter sets are $\sigma = 0.05$, and $t =5$. Plot the trace plot of the burning phase and the MCMC samples for the latent variable $home$ using the proposed distribution.
+
+\item \textbf{[Bonus, 20 points]} Set the parameters as $\sigma = 0.005, 0.05, 0.5$ and $t = 1, 5, 20, 50$, and:
+\begin{itemize}
+\item Plot the trace plot of the burning phase and the MCMC samples for the latent variable $home$ using proposal distributions with different $\sigma$ and $t$. 
+\item Estimate the rejection ratio for each parameter setting, report your results in a table. 
+\item Comment on the results. Which parameter setting worked the best for the algorithm? 
+\item Use the results from the optimal parameter setting 
+\begin{itemize}
+\item plot the posterior histogram of $home$ from the MCMC samples
+\item plot the estimated attacking strength $\mathbb{E}_{p(\thetav, \etav | \yv)}[att_i]$ against the estimated defending strength $\mathbb{E}_{p(\thetav, \etav | \yv)}[def_i]$ for each the team in one scatter plot. Please make sure to identify the team index of each point on your scatter plot.
+\end{itemize}
+\end{itemize}
+\end{enumerate}
+\textbf{You are NOT allowed to use any existing implementations of M-H in this problem. Please include all the required results (figures + tables) in your writeup PDF submission.}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\newpage
+\bibliographystyle{abbrvnat}
+\bibliography{pgm}
+
+
+
+\end{document}

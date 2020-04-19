@@ -1,0 +1,108 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<!-- saved from url=(0059)https://www.cs.cmu.edu/~epxing/Class/10708-20/lectures.html -->
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="generator" content="jemdoc, see http://jemdoc.jaboc.net/">
+
+<link rel="stylesheet" href="./10-708-probabilistic-graphical-models-coursepage-spring2020_files/jemdoc.css" type="text/css">
+<title>10-708 – Lectures (tentative)</title>
+</head>
+<body>
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script><script src="./10-708-probabilistic-graphical-models-coursepage-spring2020_files/ga.js.download" type="text/javascript"></script>
+<script type="text/javascript">
+try {
+    var pageTracker = _gat._getTracker("UA-46696476-2");
+    pageTracker._trackPageview();
+} catch(err) {}</script>
+<table summary="Table for page layout." id="tlayout">
+<tbody><tr valign="top">
+<td id="layout-menu">
+<div class="menu-category">10-708</div>
+<div class="menu-item"><a href="https://www.cs.cmu.edu/~epxing/Class/10708-20/index.html">Home</a></div>
+<div class="menu-item"><a href="https://www.cs.cmu.edu/~epxing/Class/10708-20/lectures.html" class="current">Lectures</a></div>
+<div class="menu-item"><a href="https://www.cs.cmu.edu/~epxing/Class/10708-20/homework.html">Homework</a></div>
+<div class="menu-item"><a href="https://www.cs.cmu.edu/~epxing/Class/10708-20/project.html">Project</a></div>
+<div class="menu-item"><a href="https://www.cs.cmu.edu/~epxing/Class/10708-20/logistics.html">Logistics</a></div>
+<div class="menu-item"><a href="https://www.cs.cmu.edu/~epxing/Class/10708-20/previous.html">Previous</a></div>
+</td>
+<td id="layout-content">
+<div id="toptitle">
+<h1>10-708 – Lectures (tentative)</h1>
+<div id="subtitle">2020 Spring</div>
+</div>
+<table>
+<tbody><tr class="r1"><td class="c1"><b>Lecture</b> </td><td class="c2"> <b>Date</b> </td><td class="c3"> <b>Topic</b> </td><td class="c4"> <b>Slides</b> </td><td class="c5"> <b>Videos</b> </td><td class="c6"> <b>Further Reading</b> </td><td class="c7"> <b>Note</b>
+</td></tr><tr class="myrow"><td class="mycell" colspan="7">Design of GMs</td></tr> 
+<tr class="r3"><td class="c1">01 </td><td class="c2"> Jan 13 </td><td class="c3"> Introduction to GM: (Eric) <br> - Association between random variables <br> - Marginal/partial correlation <br> - Conditional independence </td><td class="c4"> <a href="https://www.cs.cmu.edu/~epxing/Class/10708-20/lectures/lecture01-Introduction.pdf">pdf</a> </td><td class="c5"> <a href="https://scs.hosted.panopto.com/Panopto/Pages/Viewer.aspx?id=fa3b93d4-d591-40f3-a97a-ab4101164f98">panopto</a>, <br> <a href="https://youtu.be/oqvdH_8lmCA">youtube</a> </td><td class="c6"> <a href="https://projecteuclid.org/euclid.ss/1089808279">Jordan 2004</a>, <a href="https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.0030252">Airoldi 2007</a>,<br> <a href="http://www.stat.cmu.edu/~larry/=sml/GraphicalModels.pdf">Larry's notes</a> </td><td class="c7">  </td></tr>
+<tr class="r4"><td class="c1">02 </td><td class="c2"> Jan 15 </td><td class="c3"> Undirected GMs: (Eric) <br> - Markov property </td><td class="c4"> <a href="https://www.cs.cmu.edu/~epxing/Class/10708-20/lectures/lecture02-MRFrepresentation.pdf">pdf</a> </td><td class="c5"> <a href="https://scs.hosted.panopto.com/Panopto/Pages/Viewer.aspx?id=b003ef18-c4c1-4325-a144-ab41015b0491">panopto</a>, <br> <a href="https://youtu.be/aJviHlCgy7U">youtube</a> </td><td class="c6"> Koller &amp; Friedman Ch. 4 </td><td class="c7">  </td></tr>
+<tr class="r5"><td class="c1"></td><td class="c2"> Jan 20 </td><td class="c3">                                        </td><td class="c4">  </td><td class="c5">  </td><td class="c6">  </td><td class="c7"> MLK day           </td></tr>
+<tr class="r6"><td class="c1">03 </td><td class="c2"> Jan 22 </td><td class="c3"> Directed GMs: (Eric) <br> - Markov property </td><td class="c4"> <a href="https://www.cs.cmu.edu/~epxing/Class/10708-20/lectures/lecture03-BNrepresentation.pdf">pdf</a> </td><td class="c5"> <a href="https://scs.hosted.panopto.com/Panopto/Pages/Viewer.aspx?id=304b7b5e-1a85-4b4f-9f2b-ab4a011827dc">panopto</a>, <br> <a href="https://youtu.be/cyXQkRwszE8">youtube</a> </td><td class="c6"> Koller &amp; Friedman Ch. 3 </td><td class="c7"> hw1 out
+</td></tr><tr class="myrow"><td class="mycell" colspan="7">Basic Inference and Learning</td></tr> 
+<tr class="r8"><td class="c1">04 </td><td class="c2"> Jan 27 </td><td class="c3"> Exact Inference: (Eric) <br> - Variable elimination <br> - Sum-product on trees <br> - Belief propagation on junction trees </td><td class="c4"> <a href="https://www.cs.cmu.edu/~epxing/Class/10708-20/lectures/lecture04-ExactInference.pdf">pdf</a>  </td><td class="c5"> <a href="https://scs.hosted.panopto.com/Panopto/Pages/Viewer.aspx?id=9de0af08-663f-4b68-a621-ab41015b26ad">panopto</a>, <br> <a href="https://youtu.be/LEBeACzpYvY">youtube</a>  </td><td class="c6">  Jordan <a href="https://people.eecs.berkeley.edu/~jordan/prelims/chapter3.pdf">Ch. 3</a>, <a href="https://people.eecs.berkeley.edu/~jordan/prelims/chapter4.pdf">Ch. 4</a>,<br> Koller &amp; Friedman Ch. 9, Ch. 10 </td><td class="c7">  </td></tr>
+<tr class="r9"><td class="c1">05 </td><td class="c2"> Jan 29 </td><td class="c3"> Parameter Estimation: (Eric) <br> - Fully observed: MLE, MAP, Bayesian <br> - Exponential family distributions, GLMs <br> - Partially observed: EM algorithm </td><td class="c4"> <a href="https://www.cs.cmu.edu/~epxing/Class/10708-20/lectures/lecture05-ParameterEst.pdf">pdf</a> </td><td class="c5"> <a href="https://scs.hosted.panopto.com/Panopto/Pages/Viewer.aspx?id=48a2dd3a-26ae-48bd-aba6-ab41015b5d69">panopto</a>, <br> <a href="https://youtu.be/stSWElRm6mw">youtube</a> </td><td class="c6"> Koller &amp; Friedman Ch. 17.1-4, <br> Ch. 19.1-4, <br> <a href="http://www.cs.toronto.edu/~hinton/absps/emk.pdf">Neal &amp; Hinton 1998</a> </td><td class="c7">  </td></tr>
+<tr class="r10"><td class="c1">06 </td><td class="c2"> Feb 03 </td><td class="c3"> Case Studies: HMM and CRF (Eric) </td><td class="c4"> <a href="https://www.cs.cmu.edu/~epxing/Class/10708-20/lectures/lecture06-HMMCRF.pdf">pdf</a> </td><td class="c5"> <a href="https://scs.hosted.panopto.com/Panopto/Pages/Viewer.aspx?id=352421d0-61f4-4aca-b24b-ab41015b98fc">panopto</a>, <br> <a href="https://youtu.be/sZN6S4q1p_Q">youtube</a> </td><td class="c6"> Koller &amp; Friedman Ch. 6.2, <br> <a href="https://people.cs.umass.edu/~wallach/technical_reports/wallach04conditional.pdf">Wallach 2004</a>, <br> <a href="http://www.cs.cmu.edu/afs/cs/Web/People/aladdin/papers/pdfs/y2001/crf.pdf">Lafferty, McCallum, Pereira 2001</a> </td><td class="c7">
+</td></tr><tr class="myrow"><td class="mycell" colspan="7">Approximate Inference</td></tr> 
+<tr class="r12"><td class="c1">07 </td><td class="c2"> Feb 05 </td><td class="c3"> Variational Inference 1: (Eric) <br> - Variational methods <br> - LDA </td><td class="c4"> <a href="https://www.cs.cmu.edu/~epxing/Class/10708-20/lectures/lecture07-VI1.pdf">pdf</a> </td><td class="c5"> <a href="https://scs.hosted.panopto.com/Panopto/Pages/Viewer.aspx?id=9320f7d1-9b0b-48c9-aa92-ab41015bb169">panopto</a>, <br> <a href="https://youtu.be/_fMDYpdwSOw">youtube</a> </td><td class="c6"> <a href="http://www.eecs.berkeley.edu/~wainwrig/Papers/WaiJor08_FTML.pdf">Wainwright, Jordan 2008</a> </td><td class="c7">  </td></tr>
+<tr class="r13"><td class="c1">08 </td><td class="c2"> Feb 10 </td><td class="c3"> Variational Inference 2: (Xun) <br> - Stochastic/Black-box VI <br> - VI Theory </td><td class="c4"> <a href="https://www.cs.cmu.edu/~epxing/Class/10708-20/lectures/lecture08-VI2.pdf">pdf</a> </td><td class="c5"> <a href="https://scs.hosted.panopto.com/Panopto/Pages/Viewer.aspx?id=b0070abb-e955-4e6e-b54f-ab41015bd34b">panopto</a>, <br> <a href="https://youtu.be/UOtJBjZy3b4">youtube</a>  </td><td class="c6"> <a href="http://www.eecs.berkeley.edu/~wainwrig/Papers/WaiJor08_FTML.pdf">Wainwright, Jordan 2008</a> </td><td class="c7">  </td></tr>
+<tr class="r14"><td class="c1">09 </td><td class="c2"> Feb 12 </td><td class="c3"> Sampling 1: (Eric) <br> - Accept-reject sampling <br> - Importance sampling <br> - Metropolis-Hastings <br> - Gibbs sampling </td><td class="c4"> <a href="https://www.cs.cmu.edu/~epxing/Class/10708-20/lectures/lecture09-MC.pdf">pdf</a> </td><td class="c5"> <a href="https://scs.hosted.panopto.com/Panopto/Pages/Viewer.aspx?id=3e349cea-c710-401f-b07d-ab41015bf1a0">panopto</a>, <br> <a href="https://youtu.be/iE9PPB4bHiw">youtube</a>  </td><td class="c6"> <a href="http://www.inference.phy.cam.ac.uk/itprnn/book.pdf">MacKay 2003, Ch. 29.1-3</a> </td><td class="c7"> hw1 due </td></tr>
+<tr class="r15"><td class="c1">10 </td><td class="c2"> Feb 17 </td><td class="c3"> Sampling 2: (Eric) <br> - Hamiltonian Monte Carlo <br> - Langevin dynamics <br> - Sequential Monte Carlo </td><td class="c4"> <a href="https://www.cs.cmu.edu/~epxing/Class/10708-20/lectures/lecture10-MCMC-opt.pdf">pdf</a> </td><td class="c5"> <a href="https://scs.hosted.panopto.com/Panopto/Pages/Viewer.aspx?id=aa8572b7-db65-471f-bd36-ab41015c0af8">panopto</a>, <br> <a href="https://youtu.be/gc1u1Ds7SnI">youtube</a> </td><td class="c6"> <a href="http://www.inference.phy.cam.ac.uk/itprnn/book.pdf">MacKay 2003, Ch. 29.4-10</a> </td><td class="c7">
+</td></tr><tr class="myrow"><td class="mycell" colspan="7">Deep Learning and Deep Generative Models</td></tr> 
+<tr class="r17"><td class="c1">11 </td><td class="c2"> Feb 19 </td><td class="c3"> Foundations of Deep Learning: (Eric) <br> - Insight into DL <br> - Connectionss to GM </td><td class="c4"> <a href="https://www.cs.cmu.edu/~epxing/Class/10708-20/lectures/lecture11-NN.pdf">pdf</a> </td><td class="c5"> <a href="https://scs.hosted.panopto.com/Panopto/Pages/Viewer.aspx?id=eed0d210-edf7-4d38-bb38-ab41015cc468">panopto</a>, <br> <a href="https://youtu.be/W1a4gEoDrJQ">youtube</a>  </td><td class="c6"> <a href="http://www.deeplearningbook.org/">Goodfellow, Bengio, Courville 2016</a> <br> Ch. 6.2-5, 20.3-4  </td><td class="c7"> proposal due, hw2 out </td></tr>
+<tr class="r18"><td class="c1">12 </td><td class="c2"> Feb 24 </td><td class="c3"> Deep Generative Models 1: (Eric) <br> - Wake-sleep algorithm <br> - Variational autoencoder <br> - Generative adversarial networks </td><td class="c4"> <a href="https://www.cs.cmu.edu/~epxing/Class/10708-20/lectures/lecture12-DGM1.pdf">pdf</a> </td><td class="c5"> <a href="https://scs.hosted.panopto.com/Panopto/Pages/Viewer.aspx?id=03fa28df-682e-49f9-a0aa-ab41015d0b03">panopto</a>, <br> <a href="https://youtu.be/mroxN3nuDAw">youtube</a>  </td><td class="c6"> <a href="http://www.deeplearningbook.org/">Goodfellow, Bengio, Courville 2016</a> <br> Ch. 20.9-10 <br> <a href="https://arxiv.org/abs/1906.10652">Mohamed et al. 2019</a> </td><td class="c7">  </td></tr>
+<tr class="r19"><td class="c1">13 </td><td class="c2"> Feb 26 </td><td class="c3"> Deep Generative Models 2: (Eric) <br> - More GANs and variants <br> - Normalizing flows <br> - Integrating domain knowledge in DL </td><td class="c4"> <a href="https://www.cs.cmu.edu/~epxing/Class/10708-20/lectures/lecture13-DGM2.pdf">pdf</a> </td><td class="c5"> <a href="https://scs.hosted.panopto.com/Panopto/Pages/Viewer.aspx?id=e6103038-3c50-48ed-b94e-ab41015d2801">panopto</a>, <br> <a href="https://youtu.be/QH1OD-eaTI0">youtube</a> </td><td class="c6"> <a href="https://arxiv.org/abs/1701.04862">Arjovsky, Bottou 2017</a>, <br> <a href="https://arxiv.org/abs/1912.02762">Papamakarios et al. 2019</a>, <br> <a href="https://arxiv.org/abs/1806.09764">Hu et al. 2018</a> </td><td class="c7">  </td></tr>
+<tr class="r20"><td class="c1">14 </td><td class="c2"> Mar 02 </td><td class="c3"> Deep Sequence Models: (Zhiting) <br> - RNN and LSTM <br> - CNN and Transformers <br> - Attention mechanisms </td><td class="c4"> <a href="https://www.cs.cmu.edu/~epxing/Class/10708-20/lectures/lecture14-DeepSequenceModels.pdf">pdf</a> </td><td class="c5"> <a href="https://scs.hosted.panopto.com/Panopto/Pages/Viewer.aspx?id=dbf6caa9-aa80-4868-a1e7-ab41015d3edc">panopto</a>, <br> <a href="https://youtu.be/s3PY5L2F83s">youtube</a> </td><td class="c6"> <a href="http://proceedings.mlr.press/v28/pascanu13.pdf">Pascanu, Mikolov, Bengio 2013</a>, <br> <a href="https://arxiv.org/abs/1706.03762">Vaswani et al. 2017</a>, <br> <a href="https://arxiv.org/abs/1810.04805">Devlin et al. 2018</a> </td><td class="c7">  </td></tr>
+<tr class="r21"><td class="c1">15 </td><td class="c2"> Mar 04 </td><td class="c3"> Case Study: Text Generation (Zhiting) <br> - Encoder-decoder framework <br> - Machine translation as conditional generation <br> - Unifying MLE and RL for text generation </td><td class="c4"> <a href="https://www.cs.cmu.edu/~epxing/Class/10708-20/lectures/lecture15-TextGen.pdf">pdf</a>  </td><td class="c5"> <a href="https://scs.hosted.panopto.com/Panopto/Pages/Viewer.aspx?id=80d7ebda-7049-4315-8ae1-ab41015d565a">panopto</a>, <br> <a href="https://youtu.be/_RldNVZOc1w">youtube</a>  </td><td class="c6"> <a href="https://arxiv.org/abs/1511.06732">Ranzato et al. 2015</a>, <br> <a href="https://arxiv.org/abs/1703.00955">Hu et al. 2017</a> </td><td class="c7"> hw2 due, hw3 out  </td></tr>
+<tr class="r22"><td class="c1"></td><td class="c2"> Mar 09 </td><td class="c3">                                        </td><td class="c4">  </td><td class="c5">  </td><td class="c6">  </td><td class="c7"> Spring break      </td></tr>
+<tr class="r23"><td class="c1"></td><td class="c2"> Mar 11 </td><td class="c3">                                        </td><td class="c4">  </td><td class="c5">  </td><td class="c6">  </td><td class="c7"> Spring break
+</td></tr><tr class="myrow"><td class="mycell" colspan="7">Structure and Causal Inference</td></tr> 
+<tr class="r25"><td class="c1"></td><td class="c2"> Mar 16 </td><td class="c3">  </td><td class="c4">  </td><td class="c5">  </td><td class="c6">  </td><td class="c7"> No class. Stay healthy! </td></tr>
+<tr class="r26"><td class="c1">16 </td><td class="c2"> Mar 18 </td><td class="c3"> Structure Learning (Eric): <br> - Undirected GM: Gaussian GM <br> - Directed: Causal discovery </td><td class="c4"> <a href="https://www.cs.cmu.edu/~epxing/Class/10708-20/lectures/lecture16-NetworkLearning.pdf">pdf</a> </td><td class="c5"> <a href="https://scs.hosted.panopto.com/Panopto/Pages/Viewer.aspx?id=8f97b33d-b412-4f80-8c8f-ab82012d664c">panopto</a>, <br> <a href="https://youtu.be/aQXIdBsa-hU">youtube</a> </td><td class="c6"> <a href="https://projecteuclid.org/euclid.aos/1152540754">Meinshausen, Bühlmann 2006</a>, <br> <a href="https://www.cs.cmu.edu/~epxing/papers/2010/kolar_song_xing_aoas10.pdf">Kolar et al. 2010</a> </td><td class="c7">  </td></tr>
+<tr class="r27"><td class="c1">17 </td><td class="c2"> Mar 23 </td><td class="c3"> Causality 1: (<a href="http://www.andrew.cmu.edu/user/kunz1/">Kun Zhang</a>) </td><td class="c4"> <a href="https://www.cs.cmu.edu/~epxing/Class/10708-20/lectures/lecture17-Causality1.pdf">pdf</a> </td><td class="c5"> <a href="https://scs.hosted.panopto.com/Panopto/Pages/Viewer.aspx?id=2b678a1f-61e6-4009-813b-ab8701227f05">panopto</a>, <br> <a href="https://youtu.be/Cw887D_sE04">youtube</a>  </td><td class="c6"> <a href="http://bayes.cs.ucla.edu/PRIMER/">Pearl et al. 2016</a> </td><td class="c7">  </td></tr>
+<tr class="r28"><td class="c1">18 </td><td class="c2"> Mar 25 </td><td class="c3"> Causality 2: (<a href="http://www.andrew.cmu.edu/user/kunz1/">Kun Zhang</a>) </td><td class="c4"> <a href="https://www.cs.cmu.edu/~epxing/Class/10708-20/lectures/lecture18-Causality2.pdf">pdf</a> </td><td class="c5"> <a href="https://scs.hosted.panopto.com/Panopto/Pages/Viewer.aspx?id=d2386975-73f0-452d-b216-ab890142f462">panopto</a>, <br> <a href="https://youtu.be/R4JGk4JyrHw">youtube</a>  </td><td class="c6"> <a href="https://www.researchgate.net/publication/242448131_Causation_Prediction_and_Search">Spirtes et al. 1993</a>, <br> <a href="https://academic.oup.com/nsr/article/5/1/26/4638533">Zhang et al. 2017</a> </td><td class="c7">
+</td></tr><tr class="myrow"><td class="mycell" colspan="7">RL as Inference in GMs</td></tr> 
+<tr class="r30"><td class="c1">19 </td><td class="c2"> Mar 30 </td><td class="c3"> RL as Inference 1 (<a href="https://www.cs.cmu.edu/~mshediva/">Maruan</a>) </td><td class="c4"> <a href="https://www.cs.cmu.edu/~epxing/Class/10708-20/lectures/lecture19-RL1.pdf">pdf</a> </td><td class="c5">  </td><td class="c6"> <a href="http://incompleteideas.net/book/RLbook2018.pdf">Sutton, Barto</a> Ch. 3-4, <br> <a href="https://lilianweng.github.io/lil-log/2018/02/19/a-long-peek-into-reinforcement-learning.html">Lilian Weng blog post</a>, <br> <a href="https://arxiv.org/pdf/1805.00909.pdf">Levine</a> Sec. 1-4, <br> <a href="https://www.cs.cmu.edu/~bziebart/publications/thesis-bziebart.pdf">Ziebart</a> Ch. 5.1-2, 6.1-2 </td><td class="c7">  </td></tr>
+<tr class="r31"><td class="c1">20 </td><td class="c2"> Apr 01 </td><td class="c3"> RL as Inference 2                      </td><td class="c4"> <a href="https://www.cs.cmu.edu/~epxing/Class/10708-20/lectures/lecture20-RL2.pdf">pdf</a> </td><td class="c5">  </td><td class="c6">  </td><td class="c7"> hw3 due, hw4 out
+</td></tr><tr class="myrow"><td class="mycell" colspan="7">GMs on Functions and Sets</td></tr> 
+<tr class="r33"><td class="c1">21 </td><td class="c2"> Apr 06 </td><td class="c3"> Gaussian Process                       </td><td class="c4"> <a href="https://www.cs.cmu.edu/~epxing/Class/10708-20/lectures/lecture21-GP.pdf">pdf</a> </td><td class="c5">  </td><td class="c6">  </td><td class="c7">  </td></tr>
+<tr class="r34"><td class="c1">22 </td><td class="c2"> Apr 08 </td><td class="c3"> Determinantal Point Process            </td><td class="c4">  </td><td class="c5">  </td><td class="c6">  </td><td class="c7"> midway report due
+</td></tr><tr class="myrow"><td class="mycell" colspan="7">Bayesian Nonparametrics</td></tr> 
+<tr class="r36"><td class="c1">23 </td><td class="c2"> Apr 13 </td><td class="c3"> Dirichlet Process                      </td><td class="c4">  </td><td class="c5">  </td><td class="c6">  </td><td class="c7">                   </td></tr>
+<tr class="r37"><td class="c1">24 </td><td class="c2"> Apr 15 </td><td class="c3"> Indian Buffet Process                  </td><td class="c4">  </td><td class="c5">  </td><td class="c6">  </td><td class="c7">
+</td></tr><tr class="myrow"><td class="mycell" colspan="7">Applications and Systems</td></tr> 
+<tr class="r39"><td class="c1">25 </td><td class="c2"> Apr 20 </td><td class="c3"> Case Studies: Content Generation       </td><td class="c4">  </td><td class="c5">  </td><td class="c6">  </td><td class="c7">                   </td></tr>
+<tr class="r40"><td class="c1">26 </td><td class="c2"> Apr 22 </td><td class="c3"> Large-scale Algorithms and Systems     </td><td class="c4">  </td><td class="c5">  </td><td class="c6">  </td><td class="c7"> hw4 due           </td></tr>
+<tr class="r41"><td class="c1">27 </td><td class="c2"> Apr 27 </td><td class="c3"> TBD                                    </td><td class="c4">  </td><td class="c5">  </td><td class="c6">  </td><td class="c7">                   </td></tr>
+<tr class="r42"><td class="c1">28 </td><td class="c2"> Apr 29 </td><td class="c3"> TBD                                    </td><td class="c4">  </td><td class="c5">  </td><td class="c6">  </td><td class="c7"> final report due
+</td></tr></tbody></table>
+<p><br>
+Video playlists: <a href="https://scs.hosted.panopto.com/Panopto/Pages/Sessions/List.aspx?folderID=a15edd8e-782f-4ea0-8923-ab3d01099269">Panopto</a>, <a href="https://www.youtube.com/playlist?list=PLoZgVqqHOumTqxIhcdcpOAJOOimrRCGZn">Youtube</a></p>
+<p>Candidates for open slots:</p>
+<ul>
+<li><p>Structure Learning for Markov Networks</p>
+</li>
+<li><p>Theory of Variational Inference</p>
+</li>
+<li><p>Spectral and Kernel GMs</p>
+</li>
+<li><p>Max-margin GMs</p>
+</li>
+<li><p>Regularized Bayesian Learning</p>
+</li>
+<li><p>Meta-learning and Neural Process</p>
+</li>
+<li><p>...</p>
+</li>
+</ul>
+<div id="footer">
+<div id="footer-text">
+Page generated 2020-04-08 09:15:51 EDT, by <a href="http://jemdoc.jaboc.net/">jemdoc</a>.
+</div>
+</div>
+</td>
+</tr>
+</tbody></table>
+
+
+</body></html>
